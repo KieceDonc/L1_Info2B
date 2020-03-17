@@ -6,6 +6,7 @@
 package jeumemory;
 
 import java.awt.Image;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -16,18 +17,16 @@ public class Joueur {
     private String pseudo;
     private String famillepref;
     private LesPersonnages enPossession;
-    private Image imgJoueur;
+    private ImageIcon imgJoueur;
     private int score;
 
-    public Joueur(String pseudo, Image imgJoueur) {
+    public Joueur(String pseudo, ImageIcon imgJoueur) {
         setPseudo(pseudo);
         setImgJoueur(imgJoueur);
         setScore(0);
         setEnPossession(new LesPersonnages());
     }
     
-    
-
     public String getPseudo() {
         return pseudo;
     }
@@ -60,17 +59,29 @@ public class Joueur {
         this.score = score;
     }
 
-    public Image getImgJoueur() {
+    public ImageIcon getImgJoueur() {
         return imgJoueur;
     }
 
-    private void setImgJoueur(Image imgJoueur) {
+    private void setImgJoueur(ImageIcon imgJoueur) {
         this.imgJoueur = imgJoueur;
     }
-
-    public String property() {
-        return "Joueur " + pseudo + "\nfamille préféré:" + famillepref + ", en possession des personnages:" + enPossession + "score :" + score;
+    
+    public boolean equals(Joueur j){
+        return j.getPseudo().equals(this.pseudo)
+               /*&&
+               j.getFamillepref().equals(this.famillepref)
+               &&
+               j.getEnPossession().equals(this.enPossession)
+               &&
+               j.getScore()==this.score
+               &&
+               j.getImgJoueur().equals(this.imgJoueur)*/;
     }
+
+    public String toString() {
+        return "Joueur " + pseudo + "\nfamille préféré:" + famillepref + "\nen possession des personnages:" + enPossession + "\nscore :" + score;
+   }
     
     
     

@@ -1,7 +1,6 @@
 package jeumemory;
 
-import java.util.ArrayList;
-import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -286,8 +285,19 @@ public class JeuMemory extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private LesJoueurs lstPlayers;
+    private LesPersonnages lstPerso;
+    private int difficultyLvl;
+    
     private void OptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OptionsActionPerformed
-        // TODO add your handling code here:
+        JDialog opt = new InitDialog(this,true,new InitDialog.OnOptSelected() {
+            @Override
+            public void onOptSelected(LesJoueurs lj, int difficulty) {
+                lstPlayers = lj;
+                difficultyLvl = difficulty;
+            }
+        });
+        opt.setVisible(true);
     }//GEN-LAST:event_OptionsActionPerformed
 
     private void JoueurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JoueurActionPerformed
@@ -454,139 +464,4 @@ public class JeuMemory extends javax.swing.JFrame {
     private javax.swing.JButton recommencer;
     // End of variables declaration//GEN-END:variables
 
-    public class Personnage{
-        
-        private String famille="";
-        private String nom="";
-        private int valeur;
-        private ImageIcon photo;
-        
-        public Personnage(String famille, String nom, int valeur){
-            setFamille(famille);
-            setNom(nom);
-            setValeur(valeur);
-            setPhoto(nom);
-        }
-
-        public String getFamille() {
-            return famille;
-        }
-
-        private void setFamille(String famille) {
-            this.famille = famille;
-        }
-
-        public String getNom() {
-            return nom;
-        }
-
-        private void setNom(String nom) {
-            this.nom = nom;
-        }
-
-        public int getValeur() {
-            return valeur;
-        }
-
-        private void setValeur(int valeur) {
-            if(valeur>0){
-                this.valeur = valeur;
-            }
-        }
-
-        public ImageIcon getPhoto() {
-            return photo;
-        }
-
-        private void setPhoto(String nom) {
-            this.photo=new ImageIcon(getClass().getResource("memory/img/"+nom+".png"));
-        }
-        
-        @Override
-        public String toString(){
-            return "famille: "+famille+"\nnom: "+nom+"\nvaleur: "+valeur+"\nchemin d'accès: memory/img/"+nom+".png";
-        }
-        
-    }
-    
-    public class LesPersonnages{
-        private ArrayList<Personnage> persos;
-        
-        public LesPersonnages(){
-            persos = new ArrayList<Personnage>();
-        }
-        
-        public void addPerso(Personnage perso){
-            persos.add(perso);
-        }
-        
-        public void addPersos(LesPersonnages persos){
-            for(int x=0;x<persos.getSize();x++){
-                addPerso(persos.getPerso(x));
-            }
-        }
-        
-        public void deletePerso(Personnage perso){
-            if(perso!=null){
-                int i = 0;
-                boolean found = false;
-                while(found==false&&i<getSize()){
-                    if(getPerso(i).getNom().equals(perso.getNom())){
-                        persos.remove(perso);
-                        found = true;
-                    }
-                    i++;
-                }
-            }
-        }
-        
-        public void deletePersos(LesPersonnages persos){
-            for(int x=0;x<persos.getSize();x++){
-                deletePerso(persos.getPerso(x));
-            }
-        }
-        
-        public void deleteFamilly(String f){
-            for(int x=0;x<getSize();x++){
-                if(getPerso(x).getFamille().equals(f)){
-                    persos.remove(x);
-                }
-            }
-        }
-        
-        public int getSize(){
-            return persos.size();
-        }
-        
-        public Personnage getPerso(int position){
-            return persos.get(position);
-        }
-        
-        
-        
-        
-    }
-    
-    public class Joueur{
-        
-        String pseudo="";
-        String famillePreferer="";
-        LesPersonnages persoPreferer;
-        ImageIcon photojoueur;
-        
-        public Joueur(String pseudo,String famillePreferer){
-            setPseudo(pseudo);
-            setFamillePreferer(famillePreferer);
-        }
-
-        public void setPseudo(String pseudo) {
-            this.pseudo = pseudo;
-        }
-
-        public void setFamillePreferer(String famillePreferer) {
-            this.famillePreferer = famillePreferer;
-        }
-        
-    }
-    
 }

@@ -58,6 +58,11 @@ public class Personnage {
         this.photo=new ImageIcon(getClass().getResource("img/"+nom+".png")).getImage();
     }
     
+    @Override
+    public String toString(){
+        return "famille: "+famille+"\nnom: "+nom+"\nvaleur: "+valeur+"\nchemin d'accès: memory/img/"+nom+".png";
+    }
+    
     
     
 }

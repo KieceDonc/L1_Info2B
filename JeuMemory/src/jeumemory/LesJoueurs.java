@@ -13,15 +13,80 @@ import java.util.ArrayList;
  */
 public class LesJoueurs {
     
-    private ArrayList<Joueur> listJ = new ArrayList();
+    private ArrayList<Joueur> listJ;
+    
+    public LesJoueurs(){
+        listJ = new ArrayList();
+    }
     
     public Joueur getJoueur(int i){
         return listJ.get(i);
     }
     
     public int getIndiceJoueur(Joueur j){
-        return listJ.indexOf(j);
+        if(getNbJoueurs()==0){
+            return -1;
+        }
+        int toReturn = -1;
+        int cmpt=0;
+        boolean notFound = true;
+        do{
+            Joueur toParse = getJoueur(cmpt);
+            if(toParse.getPseudo().equals(j.getPseudo())){
+                toReturn = cmpt;
+                notFound=false;
+            }
+            cmpt++;
+        }while(cmpt<getNbJoueurs()&&notFound);
+        return toReturn;    
+        
     }
     
+    public int getNbJoueurs(){
+        return listJ.size();
+    }
+    
+    public void ajouteJoueur(Joueur j) throws Exception{
+        if(rechJoueur(j.getPseudo())==null){ // si le joueur n'est déjà pas présent dans la liste
+            listJ.add(j);
+        }else{
+            throw new Exception("Player already added");
+        }
+    }
+    
+    public Joueur rechJoueur(String playerName){
+        if(getNbJoueurs()==0){
+            return null;
+        }
+        Joueur toReturn = null;
+        int cmpt=0;
+        boolean notFound = true;
+        do{
+            Joueur toParse = getJoueur(cmpt);
+            if(toParse.getPseudo().equals(playerName)){
+                toReturn = toParse;
+                notFound=false;
+            }
+            cmpt++;
+        }while(cmpt<getNbJoueurs()&&notFound);
+        return toReturn;
+    }
+    
+    public void supprimeJoueur(Joueur j) throws Exception{
+        int indPlayer = getIndiceJoueur(j);
+        if(indPlayer!=-1){
+            listJ.remove(indPlayer);
+        }else{
+            throw new Exception("Trying to delete a player who's not in the list");
+        }
+    }
+    
+    public String toString(){
+        String toReturn ="";
+        for(int x=0;x<listJ.size();x++){
+            toReturn+="Joueur n°"+x+"{"+listJ.get(x).toString()+"}\n";
+        }
+        return toReturn;
+    }
     
 }
