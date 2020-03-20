@@ -1,7 +1,11 @@
-package jeumemory;
+package jeumemory.ui;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import jeumemory.ui.VisuJoueursDlg;
 import javax.swing.JDialog;
-
+import jeumemory.LesJoueurs;
+import jeumemory.LesPersonnages;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -13,7 +17,12 @@ import javax.swing.JDialog;
  * @author Valentin
  */
 public class JeuMemory extends javax.swing.JFrame {
+    
+    private static final String TAG = JeuMemory.class.getName();
 
+    private LesJoueurs lstPlayers;
+    private LesPersonnages lstPerso;
+    private int difficultyLvl;
     /**
      * Creates new form Exo3
      */
@@ -64,6 +73,7 @@ public class JeuMemory extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         Options = new javax.swing.JMenuItem();
+        AjoutJoueur = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         Joueur = new javax.swing.JMenuItem();
         Cartes = new javax.swing.JMenuItem();
@@ -263,6 +273,14 @@ public class JeuMemory extends javax.swing.JFrame {
         });
         jMenu1.add(Options);
 
+        AjoutJoueur.setText("Ajout joueur");
+        AjoutJoueur.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AjoutJoueurActionPerformed(evt);
+            }
+        });
+        jMenu1.add(AjoutJoueur);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Visualiser");
@@ -284,24 +302,22 @@ public class JeuMemory extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private LesJoueurs lstPlayers;
-    private LesPersonnages lstPerso;
-    private int difficultyLvl;
     
     private void OptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OptionsActionPerformed
-        JDialog opt = new InitDialog(this,true,new InitDialog.OnOptSelected() {
-            @Override
-            public void onOptSelected(LesJoueurs lj, int difficulty) {
-                lstPlayers = lj;
-                difficultyLvl = difficulty;
-            }
+        JDialog opt = new InitDialog(this,true,new InitDialog.setOnOptSelected() {
+        @Override
+        public void onOptSelected(LesJoueurs lj, int difficulty) {
+            lstPlayers = lj;
+            difficultyLvl = difficulty;
+            lstPerso = new LesPersonnages(difficulty);
+        }
         });
         opt.setVisible(true);
     }//GEN-LAST:event_OptionsActionPerformed
 
     private void JoueurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JoueurActionPerformed
-        // TODO add your handling code here:
+        VisuJoueursDlg visuJoueursDlg = new VisuJoueursDlg(this,true,lstPlayers);
+        visuJoueursDlg.setVisible(true);
     }//GEN-LAST:event_JoueurActionPerformed
 
     private void jBImg1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBImg1ActionPerformed
@@ -388,6 +404,26 @@ public class JeuMemory extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_demarrerActionPerformed
 
+    private void AjoutJoueurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AjoutJoueurActionPerformed
+        if(difficultyLvl!=0){
+            SaisieJoueurDlg saisieJoueurDlg = new SaisieJoueurDlg(this, true, lstPerso,new SaisieJoueurDlg.setOnNewPlayerCreated() {
+                @Override
+                public void onNewPlayerCreated(jeumemory.Joueur newPlayer) {
+                    try {
+                        System.out.println(TAG+" new Player added : "+newPlayer.toString());
+                        lstPlayers.ajouteJoueur(newPlayer);
+                    } catch (Exception ex) {
+                        System.out.println(TAG+" trying to add a player who's already in the list"+newPlayer.toString()+"\n"+ex.toString());
+                    }
+                }
+            });
+            saisieJoueurDlg.setVisible(true);
+        }else{
+            ErrorDlg error = new ErrorDlg(this,true,"Vous devez choisir une difficulté avant de saisir un nouveau joueur");
+            error.setVisible(true);
+        }
+    }//GEN-LAST:event_AjoutJoueurActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -425,6 +461,7 @@ public class JeuMemory extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem AjoutJoueur;
     private javax.swing.JMenuItem Cartes;
     private javax.swing.JMenuItem Joueur;
     private javax.swing.JMenuItem Options;

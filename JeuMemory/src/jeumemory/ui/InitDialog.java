@@ -1,9 +1,12 @@
-package jeumemory;
+package jeumemory.ui;
 
 import java.awt.Image;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import jeumemory.Joueur;
+import jeumemory.LesJoueurs;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -17,12 +20,12 @@ import javax.swing.ImageIcon;
  */
 public class InitDialog extends javax.swing.JDialog {
     
-    public interface OnOptSelected {
+    public interface setOnOptSelected {
         void onOptSelected(LesJoueurs lj, int difficulty);
     }
     
     private LesJoueurs selectedPlayers; // liste des joueurs sélectionnées par l'utilisateur
-    private OnOptSelected optListener; // utilisé pour enregistrer l'adresse de l'instance du "callback" afin de renvoyer les données
+    private setOnOptSelected optListener; // utilisé pour enregistrer l'adresse de l'instance du "callback" afin de renvoyer les données
     private static final String TAG = InitDialog.class.getName(); // utilisé pour les logs pour avoir plus de précision d'où viens les logs
     /**
      * Il existe 4 niveaux de difficulté : Enfant, débutant, avancé et expert. 
@@ -33,11 +36,12 @@ public class InitDialog extends javax.swing.JDialog {
     /**
      * Creates new form InitDialog
      */
-    public InitDialog(java.awt.Frame parent, boolean modal, OnOptSelected optListener) {
+    public InitDialog(java.awt.Frame parent, boolean modal, setOnOptSelected optListener) {
         super(parent, modal);
         this.selectedPlayers = new LesJoueurs();
         this.optListener = optListener; 
         initComponents();
+        addOnWindowSizeChangeListener();
     }
 
     /**
@@ -92,6 +96,8 @@ public class InitDialog extends javax.swing.JDialog {
         jScrollPane1.setViewportView(Info);
 
         jPanel6.add(jScrollPane1);
+
+        BPhoto.setBorder(null);
         jPanel6.add(BPhoto);
 
         getContentPane().add(jPanel6, java.awt.BorderLayout.EAST);
@@ -305,7 +311,8 @@ public class InitDialog extends javax.swing.JDialog {
                 +"\n"+"selectedPlayers ( LesJoueurs )="+selectedPlayers.toString()
         ); // Création de log 
         optListener.onOptSelected(selectedPlayers, difficulty); // on renvoie les données sélectionnées au "main" soit JeuMemory
-        System.exit(0); // on ferme la fenêtre
+        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_SubmitActionPerformed
 
     private void jRadioButtonChildActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonChildActionPerformed
@@ -334,13 +341,30 @@ public class InitDialog extends javax.swing.JDialog {
     private void updateDisplayedInformation(){
         if(selectedPlayers.getNbJoueurs()>0){
             Joueur currentPlayer = selectedPlayers.getJoueur(selectedPlayers.getNbJoueurs()-1); // on récupère le dernier joueur ajouté
-            BPhoto.setIcon(currentPlayer.getImgJoueur()); // on montre l'image du joueur
+            updateBPhoto();
             Info.setText(currentPlayer.toString()); // on affiche les informations du joueur
         }else{
             BPhoto.setIcon(null);
             Info.setText("");
         }
     }
+    
+    private void addOnWindowSizeChangeListener(){ // on ajoute un " écouteur " de quand la taille de la fenêtre change
+        this.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                updateBPhoto(); // la taille de la fenêtre a changé donc on modifie la taille de notre image
+            }
+        });
+    }
+    
+    private void updateBPhoto(){
+        if(selectedPlayers.getNbJoueurs()>0){
+            Joueur currentPlayer = selectedPlayers.getJoueur(selectedPlayers.getNbJoueurs()-1); // on récupère le dernier joueur ajouté
+            Image scaledImg = currentPlayer.getImgJoueur().getImage().getScaledInstance(BPhoto.getWidth(), BPhoto.getHeight(), Image.SCALE_SMOOTH); // on crée une image à la taille du bouton
+            BPhoto.setIcon(new ImageIcon(scaledImg)); // on montre l'image du joueur    
+        }
+    }
+    
     private Joueur getPlayer(String playerName){
         System.out.println("/jeumemory/img/"+playerName.toLowerCase()+".jpg");
         ImageIcon playerIcon = new ImageIcon(getClass().getResource("/jeumemory/img/"+playerName.toLowerCase()+".jpg"));

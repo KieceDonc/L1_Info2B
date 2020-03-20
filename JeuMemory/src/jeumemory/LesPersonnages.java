@@ -84,6 +84,27 @@ public class LesPersonnages {
         }
         return lcr;
     }
+    
+    public ArrayList<String> getStringToutesLesFamilles(){
+        ArrayList<String> toReturn = new ArrayList<>();
+        for(int x=0;x<getTaille();x++){
+            boolean alreadyAdded = false;
+            String toParse = getPerso(x).getFamille();
+            int cmpt = 0;
+            if(toReturn.size()>0){
+                do{
+                    if(toParse.equals(toReturn.get(cmpt))){
+                        alreadyAdded=true;
+                    }
+                    cmpt++;
+                }while(!alreadyAdded&&cmpt<toReturn.size());
+            }
+            if(!alreadyAdded){
+                toReturn.add(toParse);
+            }
+        }
+        return toReturn;
+    }
      
     public void retireCartes()
     { 

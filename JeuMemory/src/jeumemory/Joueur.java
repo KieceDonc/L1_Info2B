@@ -39,7 +39,7 @@ public class Joueur {
         return famillepref;
     }
 
-    private void setFamillepref(String famillepref) {
+    public void setFamillepref(String famillepref) {
         this.famillepref = famillepref;
     }
 
@@ -80,7 +80,25 @@ public class Joueur {
     }
 
     public String toString() {
-        return "Joueur " + pseudo + "\nfamille préféré:" + famillepref + "\nen possession des personnages:" + enPossession + "\nscore :" + score;
+        String toReturn = "Joueur " + pseudo + "\nfamille préféré:";
+        
+        if(famillepref==null){
+            toReturn+=" aucune";
+        }else{
+            toReturn+=" "+famillepref;
+        }
+        
+        toReturn+="\nen possession des personnages:";
+        
+        if(enPossession==null){
+            toReturn+=" aucun";
+        }else{
+            toReturn+=" "+enPossession.toString();
+        }
+        
+        toReturn+="\nscore :" + score;
+        
+        return toReturn;
    }
     
     

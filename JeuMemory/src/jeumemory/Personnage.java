@@ -55,7 +55,7 @@ public class Personnage {
     }
 
     private void setPhoto(String nom) {
-        this.photo=new ImageIcon(getClass().getResource("img/"+nom+".png")).getImage();
+        this.photo=new ImageIcon(getClass().getResource("/jeumemory/img/"+nom+".jpg")).getImage();
     }
     
     @Override
