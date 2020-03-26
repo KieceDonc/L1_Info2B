@@ -4,6 +4,7 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/Coding_WorkPlace/NetBeans/L1_S2_Info2B/JeuMemory/src/jeumemory/img/anonyme.png</file>
+            <file>file:/D:/Coding_WorkPlace/NetBeans/L1_S2_Info2B/JeuMemory/src/jeumemory/ui/VisuPersonnagesDlg.java</file>
             <file>file:/D:/Coding_WorkPlace/NetBeans/L1_S2_Info2B/JeuMemory/src/jeumemory/ui/JeuMemory.java</file>
             <file>file:/D:/Coding_WorkPlace/NetBeans/L1_S2_Info2B/JeuMemory/src/jeumemory/ui/SaisieJoueurDlg.java</file>
             <file>file:/D:/Coding_WorkPlace/NetBeans/L1_S2_Info2B/JeuMemory/src/jeumemory/Joueur.java</file>
@@ -11,11 +12,15 @@
             <file>file:/D:/Coding_WorkPlace/NetBeans/L1_S2_Info2B/JeuMemory/src/jeumemory/ui/ErrorDlg.java</file>
             <file>file:/D:/Coding_WorkPlace/NetBeans/L1_S2_Info2B/JeuMemory/src/jeumemory/img/absolute-zero.jpg</file>
             <file>file:/D:/Coding_WorkPlace/NetBeans/L1_S2_Info2B/JeuMemory/src/jeumemory/ui/InitDialog.java</file>
+            <file>file:/D:/Coding_WorkPlace/NetBeans/L1_S2_Info2B/JeuMemory/src/jeumemory/LesFamilles.java</file>
             <file>file:/D:/Coding_WorkPlace/NetBeans/L1_S2_Info2B/JeuMemory/src/jeumemory/Personnage.java</file>
             <file>file:/D:/Coding_WorkPlace/NetBeans/L1_S2_Info2B/JeuMemory/src/jeumemory/img/dazzle.jpg</file>
             <file>file:/D:/Coding_WorkPlace/NetBeans/L1_S2_Info2B/JeuMemory/src/jeumemory/LesJoueurs.java</file>
             <file>file:/D:/Coding_WorkPlace/NetBeans/L1_S2_Info2B/JeuMemory/src/jeumemory/ui/VisuJoueursDlg.java</file>
             <file>file:/D:/Coding_WorkPlace/NetBeans/L1_S2_Info2B/JeuMemory/src/jeumemory/ui/BatailleDlg.java</file>
+            <file>file:/D:/Coding_WorkPlace/NetBeans/L1_S2_Info2B/JeuMemory/src/jeumemory/Transfert.java</file>
+            <file>file:/D:/Coding_WorkPlace/NetBeans/L1_S2_Info2B/JeuMemory/src/jeumemory/Famille.java</file>
+            <file>file:/D:/Coding_WorkPlace/NetBeans/L1_S2_Info2B/JeuMemory/src/jeumemory/ui/TransfertDlg.java</file>
             <file>file:/D:/Coding_WorkPlace/NetBeans/L1_S2_Info2B/JeuMemory/src/jeumemory/img/jean-sébastien.jpg</file>
         </group>
     </open-files>

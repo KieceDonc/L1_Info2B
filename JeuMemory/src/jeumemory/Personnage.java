@@ -14,23 +14,23 @@ import javax.swing.ImageIcon;
  */
 public class Personnage {
     
-    private String famille;
+    private Famille famille;
     private String nom;
     private int valeur;
     private Image photo;
     
-    public Personnage(String famille, String nom, int valeur){
+    public Personnage(Famille famille, String nom, int valeur){
         setFamille(famille);
         setNom(nom);
         setValeur(valeur);
         setPhoto(nom);
     }
 
-    public String getFamille() {
+    public Famille getFamille() {
         return famille;
     }
 
-    private void setFamille(String famille) {
+    private void setFamille(Famille famille) {
         this.famille = famille;
     }
 

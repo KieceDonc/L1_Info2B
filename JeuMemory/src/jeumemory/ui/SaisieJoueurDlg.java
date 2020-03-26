@@ -12,6 +12,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import jeumemory.Joueur;
+import jeumemory.LesFamilles;
 import jeumemory.LesPersonnages;
 
 /**
@@ -179,7 +180,9 @@ public class SaisieJoueurDlg extends javax.swing.JDialog {
             Image img=Toolkit.getDefaultToolkit().getImage(path);
             img=img.getScaledInstance(Photo.getWidth()-10, Photo.getHeight()-10, Image.SCALE_DEFAULT);
             ImageIcon photo = new ImageIcon(img);
-            Photo.setIcon(photo);}
+            playerIcon = photo ;
+            Photo.setIcon(photo);
+        }
     }//GEN-LAST:event_ParcourirActionPerformed
 
     private void SubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitActionPerformed
@@ -189,11 +192,12 @@ public class SaisieJoueurDlg extends javax.swing.JDialog {
         if(pseudo!=null&&pseudo.length()>0&&!pseudo.equals(Error2)&&!pseudo.equals(Error1)){ // On vérifie que l'utilisateur a bien rentrer une valeur correcte
             int selectedFamily = FamilyList.getSelectedIndex();
             if(selectedFamily!=-1){ // on vérifie que l'utlisateur a bien choisit une famille
+                String favoriteFamily = (String) FamilyList.getModel().getElementAt(selectedFamily);
                 if(playerIcon!=null){ // on vérifie que l'utilisateur a bien choisit une image. Si c'est le cas, on crée le joueur avec la photo choisit
-                    newPlayer = new Joueur(pseudo,playerIcon);
+                    newPlayer = new Joueur(pseudo,playerIcon,LesFamilles.getFamilleByName(favoriteFamily));
                 }else{ // Si le joueur n'a pas sélectionner de photo, on lui met une photo anonyme
-                    ImageIcon anonym = new ImageIcon(getClass().getResource("/jeumemory/img/anonyme.jpg"));
-                    newPlayer = new Joueur(pseudo,anonym);
+                    ImageIcon anonym = new ImageIcon(getClass().getResource("/jeumemory/img/joueurDefaut.jpg"));
+                    newPlayer = new Joueur(pseudo,anonym,LesFamilles.getFamilleByName(favoriteFamily));
                 }
                 listener.onNewPlayerCreated(newPlayer); // on retourne le joueur crée
                 this.setVisible(false);

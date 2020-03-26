@@ -54,6 +54,24 @@ public class LesJoueurs {
         }
     }
     
+    public void ajouteJoueurs(LesJoueurs toAdd) throws Exception{
+        if(toAdd.getNbJoueurs()>0){
+            boolean playersCanBeAdd = true;
+            int cmpt=0;
+            do{
+                if(getIndiceJoueur(toAdd.getJoueur(cmpt))!=-1){
+                    playersCanBeAdd = false;
+                    throw new Exception("One player is already in the list");
+                }
+                cmpt++;
+            }while(cmpt<toAdd.getNbJoueurs()&&playersCanBeAdd);
+
+            for(int x=0;x<toAdd.getNbJoueurs();x++){
+                this.ajouteJoueur(toAdd.getJoueur(x));
+            }
+        }
+    }    
+    
     public Joueur rechJoueur(String playerName){
         if(getNbJoueurs()==0){
             return null;
@@ -79,6 +97,24 @@ public class LesJoueurs {
         }else{
             throw new Exception("Trying to delete a player who's not in the list");
         }
+    }
+    
+     /**
+     * on souhaite vérifié si les joueurs ont tous choisi une famille préféré qui est dans le niveau de difficulté
+     * @param chosenDifficulty 
+     * @return 
+     */
+    public boolean arePlayersValidCompareToDifficulty(int chosenDifficulty){
+        boolean allPlayerValid = true;
+        int cmpt=0;
+        do{
+            if(listJ.get(cmpt).isPlayerValidCompareToDifficulty(chosenDifficulty)==false){
+                allPlayerValid=false;
+            } 
+            cmpt++;
+        }while(cmpt<getNbJoueurs()&&allPlayerValid);
+
+        return allPlayerValid;
     }
     
     public String toString(){

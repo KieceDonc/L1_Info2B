@@ -5,6 +5,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import jeumemory.Famille;
 import jeumemory.Joueur;
 import jeumemory.LesJoueurs;
 
@@ -29,7 +30,7 @@ public class InitDialog extends javax.swing.JDialog {
     private static final String TAG = InitDialog.class.getName(); // utilisé pour les logs pour avoir plus de précision d'où viens les logs
     /**
      * Il existe 4 niveaux de difficulté : Enfant, débutant, avancé et expert. 
-     * Pour nous il correspondra au nombre de personnage dût à la difficulté = 4 ou 8 ou 18 ou 32
+     * Pour nous il correspondra au nombre de personnage dût à la difficulté = 4 ou 10 ou 18 ou 32
      */
     private int difficulty; 
 
@@ -42,6 +43,7 @@ public class InitDialog extends javax.swing.JDialog {
         this.optListener = optListener; 
         initComponents();
         addOnWindowSizeChangeListener();
+        jRadioButtonChild.setSelected(true); // par défault le niveau de difficulté enfant est sélectioné
     }
 
     /**
@@ -246,7 +248,7 @@ public class InitDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jCheckBoxLaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxLaraActionPerformed
-        Joueur lara = getPlayer("Lara");
+        Joueur lara = getPlayer("Lara",Famille.communs);
         
         if(jCheckBoxLara.isSelected()){
             addPlayer(lara);
@@ -259,7 +261,7 @@ public class InitDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jCheckBoxLaraActionPerformed
 
     private void jCheckBoxJackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxJackActionPerformed
-        Joueur jack = getPlayer("Jack");
+        Joueur jack = getPlayer("Jack",Famille.communs);
         
         if(jCheckBoxJack.isSelected()){
             addPlayer(jack);
@@ -272,7 +274,7 @@ public class InitDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jCheckBoxJackActionPerformed
 
     private void jCheckBoxJSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxJSActionPerformed
-        Joueur jb = getPlayer("Jean-Sébastien");
+        Joueur jb = getPlayer("Jean-Sébastien",Famille.rares);
         
         if(jCheckBoxJS.isSelected()){
             addPlayer(jb);
@@ -286,7 +288,7 @@ public class InitDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jCheckBoxJSActionPerformed
 
     private void jCheckBoxAmadeusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxAmadeusActionPerformed
-        Joueur amadeus = getPlayer("Amadeus");   
+        Joueur amadeus = getPlayer("Amadeus",Famille.rares);   
 
         if(jCheckBoxAmadeus.isSelected()){
             addPlayer(amadeus);
@@ -365,10 +367,11 @@ public class InitDialog extends javax.swing.JDialog {
         }
     }
     
-    private Joueur getPlayer(String playerName){
+    private Joueur getPlayer(String playerName,Famille famille){
         System.out.println("/jeumemory/img/"+playerName.toLowerCase()+".jpg");
         ImageIcon playerIcon = new ImageIcon(getClass().getResource("/jeumemory/img/"+playerName.toLowerCase()+".jpg"));
-        return new Joueur(playerName, playerIcon);
+        return new Joueur(playerName, playerIcon,famille);
+        
     }
     
     private void addPlayer(Joueur player){

@@ -15,16 +15,37 @@ import javax.swing.ImageIcon;
 public class Joueur {
     
     private String pseudo;
-    private String famillepref;
+    private Famille famillepref;
     private LesPersonnages enPossession;
     private ImageIcon imgJoueur;
     private int score;
+    
+    public Joueur(String pseudo){
+        
+    }
 
     public Joueur(String pseudo, ImageIcon imgJoueur) {
+        this(pseudo,imgJoueur,null);
+    }
+    
+    public Joueur(String pseudo, Famille famille) {
+        this(pseudo,null,famille);
+    }
+    
+    public Joueur(String pseudo, ImageIcon imgJoueur, Famille famille){
         setPseudo(pseudo);
-        setImgJoueur(imgJoueur);
+        if(imgJoueur!=null){
+            setImgJoueur(imgJoueur);
+        }else{
+            setImgJoueur(new ImageIcon(getClass().getResource("/jeumemory/img/joueurDefaut.jpg")));
+        }
         setScore(0);
         setEnPossession(new LesPersonnages());
+        if(famille!=null){
+            setFamillepref(famille);
+        }else{
+            setFamillepref(Famille.communs);
+        }
     }
     
     public String getPseudo() {
@@ -35,11 +56,11 @@ public class Joueur {
         this.pseudo = pseudo;
     }
 
-    public String getFamillepref() {
+    public Famille getFamillepref() {
         return famillepref;
     }
 
-    public void setFamillepref(String famillepref) {
+    public void setFamillepref(Famille famillepref) {
         this.famillepref = famillepref;
     }
 
@@ -65,6 +86,32 @@ public class Joueur {
 
     private void setImgJoueur(ImageIcon imgJoueur) {
         this.imgJoueur = imgJoueur;
+    }
+    
+    public void ajoutePersoPaquet(Personnage p) {
+        this.enPossession.ajoutePerso(p);
+    }
+    
+    public LesPersonnages getPaquet(){
+        return this.enPossession;
+    }
+    
+    public void initPaquetTest(){
+        ajoutePersoPaquet(new Personnage(Famille.communs,"assault-trooper", 10));
+        ajoutePersoPaquet(new Personnage(Famille.communs, "commando", 20));
+        ajoutePersoPaquet(new Personnage(Famille.rares, "absolute-zero", 10));
+    }
+    
+    /**
+     * on souhaite vérifier si le joueur a choisi une famille préférée qui est dans le niveau de difficulté
+     * @param chosenDifficulty 
+     * @return 
+     */
+    public boolean isPlayerValidCompareToDifficulty(int chosenDifficulty){
+        if(famillepref.getDifficulty()<=chosenDifficulty){
+            return true;
+        }
+        return false;
     }
     
     public boolean equals(Joueur j){

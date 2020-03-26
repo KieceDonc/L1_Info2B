@@ -89,7 +89,7 @@ public class LesPersonnages {
         ArrayList<String> toReturn = new ArrayList<>();
         for(int x=0;x<getTaille();x++){
             boolean alreadyAdded = false;
-            String toParse = getPerso(x).getFamille();
+            String toParse = getPerso(x).getFamille().getNom();
             int cmpt = 0;
             if(toReturn.size()>0){
                 do{
@@ -122,53 +122,53 @@ public class LesPersonnages {
     public LesPersonnages(int nc) {
         this.persos = new ArrayList<Personnage>();
         if (nc >= 4){ // 2 familles
-            ajoutePerso(new Personnage("communs", "assault-trooper", 10));
-            ajoutePerso(new Personnage("communs", "commando", 20));
-            ajoutePerso(new Personnage("rares", "absolute-zero", 10));
-            ajoutePerso(new Personnage("rares", "arctice-assassin", 20));
+            ajoutePerso(new Personnage(Famille.communs, "assault-trooper", 10));
+            ajoutePerso(new Personnage(Famille.communs, "commando", 20));
+            ajoutePerso(new Personnage(Famille.rares, "absolute-zero", 10));
+            ajoutePerso(new Personnage(Famille.rares, "arctice-assassin", 20));
         }
         if (nc >= 10){ // 4 familles
-            ajoutePerso(new Personnage("communs", "devestrator", 30));
-            ajoutePerso(new Personnage("rares", "brawler", 30));
-            ajoutePerso(new Personnage("alpins-femmes", "mogul-master", 10));
-            ajoutePerso(new Personnage("alpins-femmes", "mogul-master-can", 20));
-            ajoutePerso(new Personnage("as-des-pistes", "alpine-ace", 10));
-            ajoutePerso(new Personnage("as-des-pistes", "alpine-ace-can", 20));
+            ajoutePerso(new Personnage(Famille.communs, "devestrator", 30));
+            ajoutePerso(new Personnage(Famille.rares, "brawler", 30));
+            ajoutePerso(new Personnage(Famille.alpinsFemmes, "mogul-master", 10));
+            ajoutePerso(new Personnage(Famille.alpinsFemmes, "mogul-master-can", 20));
+            ajoutePerso(new Personnage(Famille.asDesPistes, "alpine-ace", 10));
+            ajoutePerso(new Personnage(Famille.asDesPistes, "alpine-ace-can", 20));
         }
         if (nc >= 18){ // 6 familles
 
-            ajoutePerso(new Personnage("alpins-femmes", "mogul-master-chn", 30));
-            ajoutePerso(new Personnage("as-des-pistes", "alpine-ace-chn", 30));
-            ajoutePerso(new Personnage("legendaires", "power-chord", 10));
-            ajoutePerso(new Personnage("legendaires", "raptor", 20));
-            ajoutePerso(new Personnage("legendaires", "raven", 30));
-            ajoutePerso(new Personnage("epiques", "burnout", 10));
-            ajoutePerso(new Personnage("epiques", "funk-ops", 20));
-            ajoutePerso(new Personnage("epiques", "rex", 30));
+            ajoutePerso(new Personnage(Famille.alpinsFemmes, "mogul-master-chn", 30));
+            ajoutePerso(new Personnage(Famille.asDesPistes, "alpine-ace-chn", 30));
+            ajoutePerso(new Personnage(Famille.legendaires, "power-chord", 10));
+            ajoutePerso(new Personnage(Famille.legendaires, "raptor", 20));
+            ajoutePerso(new Personnage(Famille.legendaires, "raven", 30));
+            ajoutePerso(new Personnage(Famille.epiques, "burnout", 10));
+            ajoutePerso(new Personnage(Famille.epiques, "funk-ops", 20));
+            ajoutePerso(new Personnage(Famille.epiques, "rex", 30));
         }
         if (nc == 32){ // 6 familles
-            ajoutePerso(new Personnage("communs", "dominator", 40));
-            ajoutePerso(new Personnage("communs", "highrise-assault-trooper", 50));
-            ajoutePerso(new Personnage("communs", "jungle-scout", 60));
-            ajoutePerso(new Personnage("communs", "pathfinder", 70));
-            ajoutePerso(new Personnage("rares", "brilliant-striker", 40));
-            ajoutePerso(new Personnage("rares", "brite-bomber", 50));
-            ajoutePerso(new Personnage("rares", "circuit-breaker", 60));
-            ajoutePerso(new Personnage("rares", "dazzle", 70));
-            ajoutePerso(new Personnage("alpins-femmes", "mogul-master-fra", 40));
-            ajoutePerso(new Personnage("alpins-femmes", "mogul-master-gbr", 50));
-            ajoutePerso(new Personnage("as-des-pistes", "alpine-ace-fra", 40));
-            ajoutePerso(new Personnage("as-des-pistes", "alpine-ace-gbr", 50));
-            ajoutePerso(new Personnage("legendaires", "red-knight", 40));
-            ajoutePerso(new Personnage("epiques", "shadow-ops", 40));
+            ajoutePerso(new Personnage(Famille.communs, "dominator", 40));
+            ajoutePerso(new Personnage(Famille.communs, "highrise-assault-trooper", 50));
+            ajoutePerso(new Personnage(Famille.communs, "jungle-scout", 60));
+            ajoutePerso(new Personnage(Famille.communs, "pathfinder", 70));
+            ajoutePerso(new Personnage(Famille.rares, "brilliant-striker", 40));
+            ajoutePerso(new Personnage(Famille.rares, "brite-bomber", 50));
+            ajoutePerso(new Personnage(Famille.rares, "circuit-breaker", 60));
+            ajoutePerso(new Personnage(Famille.rares, "dazzle", 70));
+            ajoutePerso(new Personnage(Famille.alpinsFemmes, "mogul-master-fra", 40));
+            ajoutePerso(new Personnage(Famille.alpinsFemmes, "mogul-master-gbr", 50));
+            ajoutePerso(new Personnage(Famille.asDesPistes, "alpine-ace-fra", 40));
+            ajoutePerso(new Personnage(Famille.asDesPistes, "alpine-ace-gbr", 50));
+            ajoutePerso(new Personnage(Famille.legendaires, "red-knight", 40));
+            ajoutePerso(new Personnage(Famille.epiques, "shadow-ops", 40));
         }
     }
-
-    private void ajoutePerso(Personnage personnage) {
+    
+    public void ajoutePerso(Personnage personnage) {
         persos.add(personnage);
     }
     
-    private void ajoutePersos(LesPersonnages personnages){
+    public void ajoutePersos(LesPersonnages personnages){
         for(int x=0;x<personnages.getTaille();x++){
             ajoutePerso(personnages.getPerso(x));
         }
