@@ -1,9 +1,8 @@
 package jeumemory.ui;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import jeumemory.Erreur;
 import jeumemory.Famille;
 import jeumemory.Joueur;
 import jeumemory.LesJoueurs;
@@ -22,18 +21,12 @@ import jeumemory.Personnage;
 public class JeuMemory extends javax.swing.JFrame {
     
     private static final String TAG = JeuMemory.class.getName();
-    private static final String error_mustChooseDifficulty = "Vous devez choisir une difficulté avant de saisir un nouveau joueur";
-    private static final String error_playerAlreadyInDataBase = "Le joueur ajouté existe déjà";
-    private static final String error_youMustSelectTwoPlayer = "Vous devez sélectionner 2 joueurs pour commencer à jouer";
-    private static final String error_PlayerSelectedFamillyNotInRange = "Un joueur a sélectionné une famille préférée qui n'est pas disponible pour ce niveau de difficulté";
-    private static final String error_OnePlayerAlreadyInTheList = "Un joueur ajouté est déjà présent dans la liste des joueurs. Les joueurs n'ont pas été ajouté";
-
+    
     private LesJoueurs lstPlayers = new LesJoueurs();
     private LesPersonnages lstPerso;
     
     private int difficultyLvl;
     
-    private boolean gameStarted = false;
     /**
      * Creates new form Exo3
      */
@@ -90,6 +83,7 @@ public class JeuMemory extends javax.swing.JFrame {
         Cartes = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         Transfert_Test = new javax.swing.JMenuItem();
+        Bataille_Test = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -97,14 +91,14 @@ public class JeuMemory extends javax.swing.JFrame {
 
         jPanel1.setLayout(new java.awt.GridLayout(3, 1));
 
-        jLabel1.setText("jLabel1");
+        jLabel1.setText("Work in progress");
         jPanel1.add(jLabel1);
 
-        jLabel2.setText("jLabel2");
+        jLabel2.setText("WIP");
         jPanel1.add(jLabel2);
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel3.setText("jLabel3");
+        jLabel3.setText("WIP");
         jPanel1.add(jLabel3);
 
         jPanel4.add(jPanel1, java.awt.BorderLayout.NORTH);
@@ -329,6 +323,14 @@ public class JeuMemory extends javax.swing.JFrame {
         });
         jMenu3.add(Transfert_Test);
 
+        Bataille_Test.setText("Bataille");
+        Bataille_Test.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Bataille_TestActionPerformed(evt);
+            }
+        });
+        jMenu3.add(Bataille_Test);
+
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -339,13 +341,13 @@ public class JeuMemory extends javax.swing.JFrame {
     private void OptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OptionsActionPerformed
         JDialog opt = new InitDialog(this,true,new InitDialog.setOnOptSelected() {
         @Override
-        public void onOptSelected(LesJoueurs lj, int difficulty) {
-            try {
+        public void onOptSelected(LesJoueurs lj, int difficulty) { // on ajoute un écouteur qui permet de savoir quand l'utilisateur a fini de sélectionner des options
+            try { // on essaye d'ajouter une liste de joueur
                 lstPlayers.ajouteJoueurs(lj);
-            } catch (Exception ex) {
-                showErrorDlg(error_OnePlayerAlreadyInTheList);
+            } catch (Exception ex) { // si un joueur est déjà présent dans la liste on affiche une erreur indiquant qu'aucun joueur n'a été ajouté
+                showErrorDlg(Erreur.OnePlayerAlreadyInTheList);
             }
-            difficultyLvl = difficulty;
+            difficultyLvl = difficulty; // on change le niveau de difficulté par rapport à ce que l'utilisateur a choisit
             if(difficultyLvl!=0){
                 lstPerso = new LesPersonnages(difficulty);    
             }
@@ -449,15 +451,14 @@ public class JeuMemory extends javax.swing.JFrame {
                     recommencer.setEnabled(true); 
                     Joueur.setEnabled(true); // Le bouton joueur dans le menu option menu est maintenant disponible 
                     Cartes.setEnabled(true); // Le bouton cartes dans le menu option menu est maintenant disponible
-                    gameStarted=true; // tout est valide, la partie peut commencer
                 }else{
-                    showErrorDlg(error_PlayerSelectedFamillyNotInRange);
+                    showErrorDlg(Erreur.PlayerSelectedFamillyNotInRange);
                 }
             }else{
-                showErrorDlg(error_mustChooseDifficulty);
+                showErrorDlg(Erreur.mustChooseDifficulty);
             }   
         }else{
-            jTextAreaInfo.setText(error_youMustSelectTwoPlayer);
+            jTextAreaInfo.setText(Erreur.youMustSelectTwoPlayer);
         }
     }//GEN-LAST:event_demarrerActionPerformed
 
@@ -470,14 +471,14 @@ public class JeuMemory extends javax.swing.JFrame {
                         System.out.println(TAG+" new Player added : "+newPlayer.toString());
                         lstPlayers.ajouteJoueur(newPlayer);
                     } catch (Exception ex) { // L'utilisateur essaye d'ajouté un joueur déjà présent dans la liste des joueurs
-                        showErrorDlg(error_playerAlreadyInDataBase);
+                        showErrorDlg(Erreur.playerAlreadyInDataBase);
                         System.out.println(TAG+" trying to add a player who's already in the list"+newPlayer.toString()+"\n"+ex.toString());
                     }
                 }
             });
             saisieJoueurDlg.setVisible(true);
         }else{ // L'utilisateur essaye d'ajouté un joueur mais n'a pas sélectionné de niveau de difficulté. ( il faut un niveau de difficulté pour famille préféré )
-            showErrorDlg(error_mustChooseDifficulty);
+            showErrorDlg(Erreur.mustChooseDifficulty);
         }
     }//GEN-LAST:event_AjoutJoueurActionPerformed
 
@@ -490,6 +491,7 @@ public class JeuMemory extends javax.swing.JFrame {
 
     private void Transfert_TestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Transfert_TestActionPerformed
         try {
+            lstPlayers = new LesJoueurs();
             Joueur j1=new Joueur("FanMemory0", Famille.communs);
             j1.initPaquetTest();
             Joueur j2=new Joueur("FanMemory1", Famille.communs);
@@ -501,9 +503,30 @@ public class JeuMemory extends javax.swing.JFrame {
             TransfertDlg diag = new TransfertDlg(this,true,lstPlayers,null);
             diag.setVisible(true);
         } catch (Exception ex) {
-            System.out.println(TAG+": This shouldn't been called ( Transfert_TestActionPerformed() )");
+            System.out.println(TAG+": This shouldn't been call ( Transfert_TestActionPerformed() )");
         }
     }//GEN-LAST:event_Transfert_TestActionPerformed
+
+    private void Bataille_TestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Bataille_TestActionPerformed
+        // ajout de cartes aux2 premiers joueurs 
+        try {
+            lstPlayers = new LesJoueurs();
+            Joueur j1=new Joueur("FanMemory0", Famille.communs);
+            j1.initPaquetTest();
+            Joueur j2=new Joueur("FanMemory1", Famille.communs);
+            j2.getPaquet().ajoutePerso(new Personnage(Famille.epiques, "burnout", 20));
+            j2.getPaquet().ajoutePerso(new Personnage(Famille.epiques, "funk-ops", 30));
+            j2.getPaquet().ajoutePerso(new Personnage(Famille.alpinsFemmes, "mogul-master", 10));
+            this.lstPlayers.ajouteJoueur(j1);
+            this.lstPlayers.ajouteJoueur(j2);
+            BatailleDlg diag = new BatailleDlg(this, true,lstPlayers,0);
+            diag.setSize(1000,600);
+            diag.setVisible(true);
+        } catch (Exception ex) {
+            System.out.println(TAG+": This shouldn't been call ( Bataille_TestActionPerformed() )\n");
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_Bataille_TestActionPerformed
 
     private void showErrorDlg(String error){
         ErrorDlg errorDlg = new ErrorDlg(this,true,error);
@@ -548,6 +571,7 @@ public class JeuMemory extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem AjoutJoueur;
+    private javax.swing.JMenuItem Bataille_Test;
     private javax.swing.JMenuItem Cartes;
     private javax.swing.JMenuItem Joueur;
     private javax.swing.JMenuItem Options;

@@ -6,7 +6,18 @@
 package jeumemory;
 
 /**
- *
+ * Cette classe a été crée dans le but d'être efficace contre un bug :
+ * Un joueur pouvait démarrer le jeu en ayant une famille préférée qui n'était pas
+ * disponible dans le lvl de difficulté. On doit donc avant de commencer vérifié
+ * toutes les familles préférés de chaque joueur. Avoir une méthode getDifficulty()
+ * liée à cette famille n'est donc pas de refus.
+ * 
+ * Procédé de l'ancien bug : 
+ * 1- Paramètres -> Options -> Prendre le lvl Expert -> Valider 
+ * 2- Paramètres -> Ajout joueur -> Prendre une famille de lvl 18 ou 32 -> Créer le personnage -> Valider
+ * 3- Paramètres -> Options -> Prendre le lvl Débutant -> Valider
+ * 4- Démarrer
+ * Le joueur a donc une famille préférée de lvl suppérieur à débutant, le joueur ne gagnera jamais ....
  * @author Valentin
  */
 public class Famille {
@@ -40,6 +51,11 @@ public class Famille {
     public Famille(String nom,int difficulty) {
         this.nom = nom;
         this.difficulty = difficulty;
+    }
+    
+    @Override
+    public String toString(){
+        return nom;
     }
     
 }

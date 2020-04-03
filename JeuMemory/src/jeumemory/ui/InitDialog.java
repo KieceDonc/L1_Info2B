@@ -32,7 +32,7 @@ public class InitDialog extends javax.swing.JDialog {
      * Il existe 4 niveaux de difficulté : Enfant, débutant, avancé et expert. 
      * Pour nous il correspondra au nombre de personnage dût à la difficulté = 4 ou 10 ou 18 ou 32
      */
-    private int difficulty; 
+    private int difficulty=4; // la difficulté par défaut est de 4 ( mode débutant ) 
 
     /**
      * Creates new form InitDialog

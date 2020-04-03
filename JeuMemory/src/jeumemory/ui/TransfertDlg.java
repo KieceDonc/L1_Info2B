@@ -75,7 +75,7 @@ public class TransfertDlg extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridLayout(1, 3));
 
-        PanneauG.setLayout(new java.awt.GridLayout());
+        PanneauG.setLayout(new java.awt.GridLayout(1, 0));
         getContentPane().add(PanneauG);
 
         jPanel1.setLayout(new java.awt.BorderLayout());
@@ -104,17 +104,22 @@ public class TransfertDlg extends javax.swing.JDialog {
 
         jPanel2.setLayout(new java.awt.GridLayout(1, 2));
 
-        Transfer.setText("Transfer");
+        Transfer.setText("Transfert");
         jPanel2.add(Transfer);
 
         Fermer.setText("Fermer");
+        Fermer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FermerActionPerformed(evt);
+            }
+        });
         jPanel2.add(Fermer);
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.SOUTH);
 
         getContentPane().add(jPanel1);
 
-        PanneauD.setLayout(new java.awt.GridLayout());
+        PanneauD.setLayout(new java.awt.GridLayout(1, 0));
         getContentPane().add(PanneauD);
 
         pack();
@@ -134,6 +139,11 @@ public class TransfertDlg extends javax.swing.JDialog {
             }
         }
     }//GEN-LAST:event_ComboJoueursActionPerformed
+
+    private void FermerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FermerActionPerformed
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_FermerActionPerformed
 
     private void initCombo(){
        for(int x=0;x<lstPlayers.getNbJoueurs();x++){

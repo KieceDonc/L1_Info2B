@@ -82,21 +82,21 @@ public class VisuJoueursDlg extends javax.swing.JDialog {
             int nbPlayers = playersToShow.getNbJoueurs();
             Panneau.setLayout(new GridLayout(1,nbPlayers));
             if(nbPlayers>0){
-                for(int x=0;x<nbPlayers;x++){
-                    JButton jb = new JButton();
-                    Joueur currentPlayer = playersToShow.getJoueur(x);
-                    jb.setText(""+currentPlayer.getPseudo());
-                    jb.addActionListener(new java.awt.event.ActionListener(){
+                for(int x=0;x<nbPlayers;x++){ // on parcourt la liste des joueurs
+                    JButton jb = new JButton(); // on crée un nouveau 
+                    Joueur currentPlayer = playersToShow.getJoueur(x); // on récupère le joueur courant
+                    jb.setText(""+currentPlayer.getPseudo()); // le texte prendre la valeur du pseudo du joueur
+                    jb.addActionListener(new java.awt.event.ActionListener(){ // on ajoute un écouter
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             System.out.println(TAG+": "+currentPlayer.getPseudo()+" button clicked");
-                            showInfo.setText(currentPlayer.toString());
+                            showInfo.setText(currentPlayer.toString()); // si l'utilisateur clique sur le bouton on affiche les informations du joueur
                         }                    
                     });
                     Panneau.add(jb);
                 }
             }
-            Panneau.add(showInfo);  
+            Panneau.add(showInfo);  // on ajoute le boutton crée
             showInfo.setText("Texte qui sert à avoir une bonne dimension"
                     + "\nTexte qui sert à avoir une bonne dimension"
                     + "\nTexte qui sert à avoir une bonne dimension"
@@ -136,11 +136,11 @@ public class VisuJoueursDlg extends javax.swing.JDialog {
     
     private void showPhoto(){
         int nbPlayer = Panneau.getComponentCount()-1; // -1 car on exclue le JTextArea
-        for(int x=0;x<nbPlayer;x++){
-            JButton currentButton = (JButton) Panneau.getComponent(x);
-            Joueur currentPlayer = playersToShow.getJoueur(x);
-            Image scaledImg = currentPlayer.getImgJoueur().getImage().getScaledInstance(currentButton.getWidth(), currentButton.getHeight(), Image.SCALE_SMOOTH); // on crée une image à la taille du bouton
-            currentButton.setIcon(new ImageIcon(scaledImg));
+        for(int x=0;x<nbPlayer;x++){ // on parcourt la liste des composants
+            JButton currentButton = (JButton) Panneau.getComponent(x); // on récupère le JButton courant
+            Joueur currentPlayer = playersToShow.getJoueur(x); // on récupère le joueur courant
+            Image scaledImg = currentPlayer.getImgJoueur().getImage().getScaledInstance(currentButton.getWidth(), currentButton.getHeight(), Image.SCALE_SMOOTH); // on crée une image à la taille du bouton courant
+            currentButton.setIcon(new ImageIcon(scaledImg)); // on affiche la photo du joueur
         }
     }
     

@@ -5,20 +5,53 @@
  */
 package jeumemory.ui;
 
+import java.awt.Image;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import jeumemory.Bataille;
+import jeumemory.Joueur;
+import jeumemory.LesJoueurs;
+
 /**
  *
  * @author vv224843
  */
 public class BatailleDlg extends javax.swing.JDialog {
+    
+    private LesJoueurs listJoueur;
+    private Joueur joueur;
+    private Joueur adversaire;
+    private Bataille b;
+    private int indexJoueur;
+    /* utilisé pour fixer un micro bug ( Si le joueur sélectionner un joueur valide ( autre que lui ) alors adversaire va prendre une valeur.
+       Ensuite si l'utilisateur clic sur lui de nouveau alors la sélection sera bien invalide mais la condition adversaire!=null serra vérifier
+       Ainsi si l'utilisateur démarrer la bataille elle va se lancer sur l'ancienne sélection
+       avec ce booléen canStart on évite tout malentendu .... )
+    */
+    private boolean canStart=false; //
 
     /**
      * Creates new form BatailleDlg
      */
-    public BatailleDlg(java.awt.Frame parent, boolean modal) {
+    public BatailleDlg(java.awt.Frame parent, boolean modal, LesJoueurs lj, int jc) {
         super(parent, modal);
         initComponents();
+        this.listJoueur = lj;
+        this.indexJoueur = jc;
+        this.joueur = lj.getJoueur(jc);
+        Annuler.setText("Annuler");
+        Annuler.setVisible(false);
+        MessageJ.setText(joueur.getPseudo()+" va affronter un adversaire");
+        initJList();
     }
 
+    private void initJList(){
+        DefaultListModel mod = new DefaultListModel(); // On crée un nouvel adapteur pour la JList
+        for(int x=0;x<listJoueur.getNbJoueurs();x++){
+            mod.addElement(listJoueur.getJoueur(x).getPseudo());
+        }
+        jList.setModel(mod);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,13 +62,13 @@ public class BatailleDlg extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        MessageJ = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        jList = new javax.swing.JList<>();
         jPanel2 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
-        Joueur = new javax.swing.JLabel();
-        Adversaire = new javax.swing.JLabel();
+        JoueurLabel = new javax.swing.JLabel();
+        AdversaireLabel = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         InfosCarte1 = new javax.swing.JTextArea();
@@ -51,16 +84,15 @@ public class BatailleDlg extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setLayout(new java.awt.GridLayout(1, 2));
+        jPanel1.add(MessageJ);
 
-        jLabel1.setText("jLabel1");
-        jPanel1.add(jLabel1);
-
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        jList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        jList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jListMouseClicked(evt);
+            }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(jList);
 
         jPanel1.add(jScrollPane1);
 
@@ -69,12 +101,8 @@ public class BatailleDlg extends javax.swing.JDialog {
         jPanel2.setLayout(new java.awt.BorderLayout());
 
         jPanel5.setLayout(new java.awt.GridLayout(1, 2));
-
-        Joueur.setText("jLabel2");
-        jPanel5.add(Joueur);
-
-        Adversaire.setText("jLabel2");
-        jPanel5.add(Adversaire);
+        jPanel5.add(JoueurLabel);
+        jPanel5.add(AdversaireLabel);
 
         jPanel2.add(jPanel5, java.awt.BorderLayout.NORTH);
 
@@ -86,10 +114,12 @@ public class BatailleDlg extends javax.swing.JDialog {
 
         jPanel4.add(jScrollPane2);
 
-        Carte1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tp3_info2b/img/anonyme.png"))); // NOI18N
+        Carte1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Carte1ActionPerformed(evt);
+            }
+        });
         jPanel4.add(Carte1);
-
-        Carte2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tp3_info2b/img/anonyme.png"))); // NOI18N
         jPanel4.add(Carte2);
 
         InfosCarte2.setColumns(20);
@@ -107,19 +137,105 @@ public class BatailleDlg extends javax.swing.JDialog {
         Vainqueur.setBackground(new java.awt.Color(174, 227, 76));
         Vainqueur.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         Vainqueur.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Vainqueur.setText("jLabel2");
         jPanel3.add(Vainqueur);
 
-        Annuler.setText("jButton1");
+        Annuler.setText("Annuler");
+        Annuler.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AnnulerActionPerformed(evt);
+            }
+        });
         jPanel3.add(Annuler);
 
-        Demarrer.setText("jButton1");
+        Demarrer.setText("Démarrer");
+        Demarrer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DemarrerActionPerformed(evt);
+            }
+        });
         jPanel3.add(Demarrer);
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.SOUTH);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListMouseClicked
+        int selectedIndex = jList.getSelectedIndex();
+        if(selectedIndex!=-1){
+            if(selectedIndex!=indexJoueur){
+                canStart=true;
+                adversaire = listJoueur.getJoueur(selectedIndex);
+                b = new Bataille(joueur,adversaire);
+                Annuler.setVisible(true);
+                JoueurLabel.setText(joueur.getPseudo());
+                AdversaireLabel.setText(adversaire.getPseudo());
+                InfosCarte1.setText(joueur.getEnPossession().toString()); // on affiche les informations relatives au paquet de carte du joueur
+                InfosCarte2.setText(adversaire.getEnPossession().toString()); // on affiche les informations relatives au paquet de carte de l'adversaire
+                MessageJ.setText(adversaire.getPseudo()+" sélectionné");
+            }else{
+                canStart=false;
+                MessageJ.setText("Veuillez sélectionner un autre joueur que vous même !");
+            }
+        }else{
+            canStart=false;
+            MessageJ.setText("Veuillez sélectionner un joueur");
+        }
+    }//GEN-LAST:event_jListMouseClicked
+
+    private void DemarrerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DemarrerActionPerformed
+        if(adversaire!=null){
+            if(canStart){
+                // on affiche les informations relatives à la première carte du paquet du joueur
+                // on affiche les informations relatives à la première carte du paquet de l'adversaire
+                updateCartes(joueur.getEnPossession().getPerso(0).toString(),adversaire.getEnPossession().getPerso(0).toString());
+                int batailleResult = b.execute();
+                if(batailleResult==1||batailleResult==2){
+                    if(batailleResult==1){ // le joueur a gagné
+                        Vainqueur.setText(joueur.getPseudo());
+                    }else{ // l'adversaire a gagné
+                        Vainqueur.setText(adversaire.getPseudo());
+                    }
+                    // on affiche les informations relatives au paquet de carte du joueur
+                    // on affiche les informations relatives au paquet de carte de l'adversaire
+                    updateCartes(joueur.getEnPossession().toString(),adversaire.getEnPossession().toString());
+                    Carte1.setIcon(new ImageIcon(joueur.getEnPossession().getPerso(0).getPhoto().getScaledInstance(Carte1.getWidth(), Carte1.getHeight(), Image.SCALE_SMOOTH))); // on affiche la photo de la nouvelle carte au dessus du paquet
+                    Carte2.setIcon(new ImageIcon(adversaire.getEnPossession().getPerso(0).getPhoto().getScaledInstance(Carte2.getWidth(), Carte2.getHeight(), Image.SCALE_SMOOTH))); // on affiche la photo de la nouvelle carte au dessus du paquet
+                }else{ // soit il y a match nul soit l'un des deux joueurs n'a plus de carte
+                    if(batailleResult==0){ // il y a eu match nul ( on peut continuer a jouer )
+                        Vainqueur.setText("Match nul");
+                    }else{ // L'un des deux joueurs a un paquet vide ( impossible de continuer a jouer ) 
+                        Demarrer.setEnabled(false);
+                        Annuler.setText("Fermer");
+                        if(joueur.getEnPossession().getTaille()!=0){//Joueur vainqueur
+                            Vainqueur.setText(joueur.getPseudo()+" a gagné !");
+                            updateCartes(joueur.getEnPossession().toString(),""); // on affiche les informations relatives au paquet du joueur et on supprime le texte de l'adversaire
+                        }else{ // Adversaire vainqueur
+                            Vainqueur.setText(adversaire.getPseudo()+" a gagné !");
+                            updateCartes("",adversaire.getEnPossession().toString()); // on affiche les informations relatives au paquet de l'adversaire et on supprime de le texte du joueur
+                        }
+                    }
+                }
+            }else{
+                MessageJ.setText("Votre sélection n'est pas correcte");
+            }
+        }else{
+            MessageJ.setText("Veuillez sélectionner un joueur");
+        }
+    }//GEN-LAST:event_DemarrerActionPerformed
+
+    private void updateCartes(String s1,String s2){ // met à jour les jTextArea
+        InfosCarte1.setText(s1);
+        InfosCarte2.setText(s2);
+    }
+    private void Carte1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Carte1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Carte1ActionPerformed
+
+    private void AnnulerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnnulerActionPerformed
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_AnnulerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -151,7 +267,7 @@ public class BatailleDlg extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                BatailleDlg dialog = new BatailleDlg(new javax.swing.JFrame(), true);
+                BatailleDlg dialog = new BatailleDlg(new javax.swing.JFrame(), true, null,0);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -164,17 +280,17 @@ public class BatailleDlg extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Adversaire;
+    private javax.swing.JLabel AdversaireLabel;
     private javax.swing.JButton Annuler;
     private javax.swing.JButton Carte1;
     private javax.swing.JButton Carte2;
     private javax.swing.JButton Demarrer;
     private javax.swing.JTextArea InfosCarte1;
     private javax.swing.JTextArea InfosCarte2;
-    private javax.swing.JLabel Joueur;
+    private javax.swing.JLabel JoueurLabel;
+    private javax.swing.JLabel MessageJ;
     private javax.swing.JLabel Vainqueur;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JList<String> jList1;
+    private javax.swing.JList<String> jList;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

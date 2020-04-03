@@ -132,7 +132,7 @@ public class Joueur {
         if(famillepref==null){
             toReturn+=" aucune";
         }else{
-            toReturn+=" "+famillepref;
+            toReturn+=" "+famillepref.toString();
         }
         
         toReturn+="\nen possession des personnages:";
@@ -147,12 +147,5 @@ public class Joueur {
         
         return toReturn;
    }
-    
-    
-    
-    
-    
-    
-    
     
 }

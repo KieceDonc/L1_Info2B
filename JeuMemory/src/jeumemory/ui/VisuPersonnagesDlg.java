@@ -53,7 +53,7 @@ public class VisuPersonnagesDlg extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         CartesDuJoueur.setText("Cartes du joueur : ");
-        getContentPane().add(CartesDuJoueur, java.awt.BorderLayout.PAGE_START);
+        getContentPane().add(CartesDuJoueur, java.awt.BorderLayout.NORTH);
 
         jPanelTrombi.setVerifyInputWhenFocusTarget(false);
         jPanelTrombi.setLayout(new java.awt.GridLayout(1, 0));
@@ -67,12 +67,14 @@ public class VisuPersonnagesDlg extends javax.swing.JDialog {
                 ShowActionPerformed(evt);
             }
         });
-        jPanel1.add(Show, java.awt.BorderLayout.CENTER);
+        jPanel1.add(Show, java.awt.BorderLayout.SOUTH);
 
         Score.setText("Score :");
-        jPanel1.add(Score, java.awt.BorderLayout.PAGE_START);
+        jPanel1.add(Score, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
+
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void ShowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowActionPerformed

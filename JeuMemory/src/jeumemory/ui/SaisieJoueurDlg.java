@@ -23,12 +23,12 @@ public class SaisieJoueurDlg extends javax.swing.JDialog {
     
     private static final String TAG = SaisieJoueurDlg.class.getName();
     
-    private setOnNewPlayerCreated listener;
-    private LesPersonnages charactersList;
-    private Joueur newPlayer;
-    private ImageIcon playerIcon;
+    private setOnNewPlayerCreated listener; // Écouteur qui permet de renvoyer des informations 
+    private LesPersonnages charactersList; // Liste des personnages en fonction de la difficulté
+    private Joueur newPlayer; // Variable qui stock (l'adresse de ) l'instance du nouveau joueur qui va être crée
+    private ImageIcon playerIcon; // Variable qui stock ( l'adresse de ) l'icon du joueur qui va être crée
     
-    public interface setOnNewPlayerCreated{
+    public interface setOnNewPlayerCreated{ // on définie une nouvelle interface qui permet d'instancier un écouteur qui renvoie en paramètre un joueur 
         void onNewPlayerCreated(Joueur newPlayer);
     }
     
@@ -37,10 +37,10 @@ public class SaisieJoueurDlg extends javax.swing.JDialog {
      */
     public SaisieJoueurDlg(java.awt.Frame parent, boolean modal, LesPersonnages charactersList,setOnNewPlayerCreated listener) {
         super(parent, modal);
-        this.charactersList = charactersList;
-        this.listener = listener;
-        initComponents();
-        initFamilyList();
+        this.charactersList = charactersList; // On récupère la liste des personnages en fonction de la difficulté choisit auparavant
+        this.listener = listener; // On récupère l'écouteur qui va retransmettre les informations entrée par l'utilisateur
+        initComponents(); // initialisation des composants
+        initFamilyList(); // initialisation de la JList avec la liste des familles disponible en fonction de la difficulté
     }
 
     /**
@@ -76,7 +76,7 @@ public class SaisieJoueurDlg extends javax.swing.JDialog {
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Créez votre joueur !");
-        getContentPane().add(jLabel1, java.awt.BorderLayout.PAGE_START);
+        getContentPane().add(jLabel1, java.awt.BorderLayout.NORTH);
 
         jPanel1.setLayout(new java.awt.GridLayout(1, 2));
 
@@ -98,7 +98,7 @@ public class SaisieJoueurDlg extends javax.swing.JDialog {
         jPanel6.setLayout(new java.awt.BorderLayout());
 
         jLabel3.setText("Quelle est votre famille préférée de personnages ?");
-        jPanel6.add(jLabel3, java.awt.BorderLayout.PAGE_START);
+        jPanel6.add(jLabel3, java.awt.BorderLayout.NORTH);
 
         FamilyList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(FamilyList);
@@ -157,38 +157,39 @@ public class SaisieJoueurDlg extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void initFamilyList(){
-        if(charactersList!=null){
-            DefaultListModel mod = new DefaultListModel();
-            ArrayList<String> allFamilyName = charactersList.getStringToutesLesFamilles();
-            for(int x=0;x<allFamilyName.size();x++){
-                mod.addElement(allFamilyName.get(x));
+        if(charactersList!=null){ // On vérifie si la liste transmise n'est pas nulle ( cette condition est censé être toujours vrai car on vérifie déjà avant d'initialiser le dialogue que la liste n'est pas nulle )
+            DefaultListModel mod = new DefaultListModel(); // On crée un nouvel adapteur pour la JList
+            ArrayList<String> allFamilyName = charactersList.getStringToutesLesFamilles(); // On récupère le nom de toutes les familles disponibles
+            for(int x=0;x<allFamilyName.size();x++){ // on parcourt la liste
+                mod.addElement(allFamilyName.get(x)); // on ajoute chaque famille à l'adapteur
             }
-            FamilyList.setModel(mod);
+            FamilyList.setModel(mod); // on définit l'adapteur de la JList
         }else{
             System.out.println(TAG+" charactersList is null");
         }
     }
+    
     private void CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelActionPerformed
-        this.setVisible(false);
+        this.setVisible(false); // on ferme la fenêtre sans renvoie d'informations
         this.dispose();
     }//GEN-LAST:event_CancelActionPerformed
 
     private void ParcourirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ParcourirActionPerformed
-        JFileChooser jf= new JFileChooser();
-        if (jf.showOpenDialog(this)== JFileChooser.APPROVE_OPTION){ 
-            String path = jf.getSelectedFile().getPath(); 
-            Image img=Toolkit.getDefaultToolkit().getImage(path);
-            img=img.getScaledInstance(Photo.getWidth()-10, Photo.getHeight()-10, Image.SCALE_DEFAULT);
-            ImageIcon photo = new ImageIcon(img);
-            playerIcon = photo ;
-            Photo.setIcon(photo);
+        JFileChooser jf= new JFileChooser(); // on crée une nouvelle instance 
+        if (jf.showOpenDialog(this)== JFileChooser.APPROVE_OPTION){ // si l'utilisateur a choisit l'image
+            String path = jf.getSelectedFile().getPath(); // on récupère le chemin de l'image choisit
+            Image img=Toolkit.getDefaultToolkit().getImage(path); // on recupère l'adresse de l'instance de l'image
+            img=img.getScaledInstance(Photo.getWidth()-10, Photo.getHeight()-10, Image.SCALE_DEFAULT); // on redimensionne notre image à notre souhaite
+            ImageIcon photo = new ImageIcon(img); // on crée une nouvelle de ImageIcon
+            playerIcon = photo ; // la variable qui contient l'adresse de l'image du joueur en création prend l'adresse de l'instance de la ligne de code juste au dessus
+            Photo.setIcon(photo); // on affiche la photo du joueur
         }
     }//GEN-LAST:event_ParcourirActionPerformed
 
     private void SubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitActionPerformed
         String Error1 = "Vous devez entrer votre pseudo ici";
         String Error2 = "Vous devez choisisr une famille préféré";
-        String pseudo = userInput.getText();
+        String pseudo = userInput.getText(); // On récupère la valeur entrée par l'utilisateur
         if(pseudo!=null&&pseudo.length()>0&&!pseudo.equals(Error2)&&!pseudo.equals(Error1)){ // On vérifie que l'utilisateur a bien rentrer une valeur correcte
             int selectedFamily = FamilyList.getSelectedIndex();
             if(selectedFamily!=-1){ // on vérifie que l'utlisateur a bien choisit une famille
@@ -199,7 +200,7 @@ public class SaisieJoueurDlg extends javax.swing.JDialog {
                     ImageIcon anonym = new ImageIcon(getClass().getResource("/jeumemory/img/joueurDefaut.jpg"));
                     newPlayer = new Joueur(pseudo,anonym,LesFamilles.getFamilleByName(favoriteFamily));
                 }
-                listener.onNewPlayerCreated(newPlayer); // on retourne le joueur crée
+                listener.onNewPlayerCreated(newPlayer); // on retourne le joueur crée à travers l'écouteur
                 this.setVisible(false);
                 this.dispose();
             }else{ 
