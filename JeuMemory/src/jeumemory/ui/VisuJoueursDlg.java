@@ -116,7 +116,7 @@ public class VisuJoueursDlg extends javax.swing.JDialog {
             if(!showButtonAlreadyPressed){
                 showButtonAlreadyPressed=true;
                 showPhoto();
-                addOnWindowSizeChangeListener();
+                setOnWindowSizeChangeListener();
             }
         }else{ // il n'existe pas de joueurs. le boutton à donc prit comme texte ( " Annuler " ) et on souhaite donc annuler le dialog
             this.setVisible(false);
@@ -125,7 +125,7 @@ public class VisuJoueursDlg extends javax.swing.JDialog {
     }//GEN-LAST:event_showActionPerformed
 
 
-    private void addOnWindowSizeChangeListener(){ // on ajoute un " écouteur " de quand la taille de la fenêtre change
+    private void setOnWindowSizeChangeListener(){ // on ajoute un " écouteur " de quand la taille de la fenêtre change
         this.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
                 showPhoto(); // la taille de la fenêtre a changé donc on modifie la taille de notre image

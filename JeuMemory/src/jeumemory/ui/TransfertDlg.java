@@ -5,11 +5,16 @@
  */
 package jeumemory.ui;
 
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JPanel;
+import jeumemory.Joueur;
 import jeumemory.LesJoueurs;
 import jeumemory.LesPersonnages;
 import jeumemory.Transfert;
@@ -20,16 +25,21 @@ import jeumemory.Transfert;
  */
 public class TransfertDlg extends javax.swing.JDialog {
     
+    private static final String TAG = TransfertDlg.class.getName();
+    
     public interface setOnTransferSucceed{
         void onTransferSucceed(Transfert transfert);
     }
     
-    private setOnTransferSucceed listener;
+    private setOnTransferSucceed listener; // instance de l'écouteur qui permet de renvoyer le transfert
     private LesJoueurs lstPlayers; //collection des joueurs, pour initialiser la liste déroulante avec les pseudos des joueurs
     private int indj; //indice joueur courant
     private Transfert transfert; // cette classe sera étudiée ultérieurement –laisser l’attribut en commentaire
     private int indjs; //indice du joueur sélectionnédans la liste déroulante
     private String fs; //famille du personnage sélectionné en cliquant sur un des personnages du joueur sélectionné
+    
+    private boolean setupFinished = false; // utilisé contre un bug
+    private boolean allowToResizeDroit = true; // utilisé contre un bug
 
     /**
      * Creates new form TransferDlg
@@ -48,6 +58,9 @@ public class TransfertDlg extends javax.swing.JDialog {
         Infos.setText("Personnages de "+lstPlayers.getJoueur(indj).getPseudo()+" : \n"+lstPlayers.getJoueur(indj).getPaquet());
         //TODO Commenter  boutonActionPerformed (http://ufrsciencestech.u-bourgogne.fr/licence1/Info2B_InterfacesVisuelles/TP/tp6_I2B_2020.pdf)
         //TODO Dans le jeu, la boite ne s’ouvriraque si au moins un autre joueur à des cartes. /!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\
+        initPanneauGauche();
+        JButtonTransfert.setEnabled(false);
+        setOnWindowSizeChangeListener();
     }
 
     /**
@@ -68,7 +81,7 @@ public class TransfertDlg extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         Infos = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
-        Transfer = new javax.swing.JButton();
+        JButtonTransfert = new javax.swing.JButton();
         Fermer = new javax.swing.JButton();
         PanneauD = new javax.swing.JPanel();
 
@@ -104,8 +117,13 @@ public class TransfertDlg extends javax.swing.JDialog {
 
         jPanel2.setLayout(new java.awt.GridLayout(1, 2));
 
-        Transfer.setText("Transfert");
-        jPanel2.add(Transfer);
+        JButtonTransfert.setText("Transfert");
+        JButtonTransfert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JButtonTransfertActionPerformed(evt);
+            }
+        });
+        jPanel2.add(JButtonTransfert);
 
         Fermer.setText("Fermer");
         Fermer.addActionListener(new java.awt.event.ActionListener() {
@@ -130,14 +148,15 @@ public class TransfertDlg extends javax.swing.JDialog {
         if (indjs != -1){ // si un item dans la liste a été sélectionné alors
             if(this.indjs == this.indj) { // on vérifie que l'utilisateur n'a pas sélectionné le joueur courant. Si c'est le cas, on lui indique
                 Infos.setText("Sélectionnez un joueur différent du joueur courant !");
-                PanneauG.removeAll();
-                PanneauG.repaint();
+                PanneauD.removeAll();
+                PanneauD.repaint();
             }else { // sinon on affiche les informations relatives au joueur sélectionné
                 Infos.setText("\nJoueur sélectionné: "+lstPlayers.getJoueur(indjs).toString());
-                initPanneau();
-                affichePanneau();
+                initPanneauDroit();
+                dessinePanneau(PanneauD,lstPlayers.getJoueur(indjs).getPaquet());
             }
         }
+        enableTransfertIfNeeded();
     }//GEN-LAST:event_ComboJoueursActionPerformed
 
     private void FermerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FermerActionPerformed
@@ -145,27 +164,80 @@ public class TransfertDlg extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_FermerActionPerformed
 
+    private void JButtonTransfertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JButtonTransfertActionPerformed
+        Joueur jCourant = lstPlayers.getJoueur(indj);
+        Joueur jCible = lstPlayers.getJoueur(indjs);
+
+        transfert = new Transfert(jCourant, jCible,fs);
+        int result = transfert.execute();
+        System.out.println(result);
+        if(result>0){
+            initPanneauGauche();
+            initFinalPanneauDroit();
+            JButtonTransfert.setEnabled(false);
+        }else{
+            Infos.setText("Il est nécessaire de sélectionner un joueur qui a au moins une carte");
+        }
+    }//GEN-LAST:event_JButtonTransfertActionPerformed
+
+    private void boutonActionPerformed(ActionEvent evt){
+        LesPersonnages lp = lstPlayers.getJoueur(indjs).getPaquet(); // on récupère les personnages du joueur sélectionné
+        int t = lp.getTaille(); // on récupère la taille des personnages 
+        JButton bt=(JButton) evt.getSource(); // on récupère le boutton sur lequel l'utilisateur a cliqué
+        fs = bt.getName();// la proprité Name, contient ici le nom du personnage affiché sur le bouton
+        for(int i = 0; i < t; i++) {
+            JButton b = (JButton)(PanneauD.getComponent(i));
+            if (b.getName().equals(fs)){
+                b.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, new java.awt.Color(255, 0, 0)));
+            }else{
+                b.setBorder(null);
+            }
+        }
+        LesPersonnages lps = lp.getPersosFamille(fs);
+        Infos.setText("Vous pouvez récupérer "+lps.getTaille()+" personnages : \n"+lps);
+        enableTransfertIfNeeded();
+    }
     private void initCombo(){
        for(int x=0;x<lstPlayers.getNbJoueurs();x++){
            ComboJoueurs.addItem(lstPlayers.getJoueur(x).getPseudo());
        } 
     }
     
-    private void affichePanneau(){
-        LesPersonnages paquet = lstPlayers.getJoueur(indjs).getPaquet();
-        for(int x=0;x<paquet.getTaille();x++){
-            JButton currentButton = (JButton) PanneauG.getComponent(x);
-            currentButton.setIcon(new ImageIcon(paquet.getPerso(x).getPhoto()));
-        }
+    private void setOnWindowSizeChangeListener(){ // on ajoute un " écouteur " de quand la taille de la fenêtre change
+        this.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                if(setupFinished){
+                    dessinePanneau(PanneauG,lstPlayers.getJoueur(indj).getPaquet()); // la taille de la fenêtre a changé donc on modifie la taille de nos images
+                }
+                if(indjs!=-1&&indjs!=indj){
+                    dessinePanneau(PanneauD,lstPlayers.getJoueur(indjs).getPaquet()); // la taille de la fenêtre a changé donc on modifie la taille de nos images                    
+                }
+            }
+        });
+        System.out.println(TAG+": adding on component resized listener");
     }
-   
-    private void initPanneau(){
+    
+    private void initPanneauGauche(){
         PanneauG.removeAll();
         this.repaint();
         LesPersonnages lcs = lstPlayers.getJoueur(indjs).getPaquet();
         int t = lcs.getTaille();
         int n = 1+(t-1)/4;
         PanneauG.setLayout(new java.awt.GridLayout(4,n));
+        for(int x=0;x<t;x++){
+            JButton bt = new JButton();
+            PanneauG.add(bt);
+        }
+        setupFinished = true; 
+    }
+   
+    private void initPanneauDroit(){
+        PanneauD.removeAll();
+        this.repaint();
+        LesPersonnages lcs = lstPlayers.getJoueur(indjs).getPaquet();
+        int t = lcs.getTaille();
+        int n = 1+(t-1)/4;
+        PanneauD.setLayout(new java.awt.GridLayout(4,n));
         for(int x=0;x<t;x++){
             JButton bt = new JButton();
             bt.setName(lcs.getPerso(x).getFamille().getNom());
@@ -175,27 +247,44 @@ public class TransfertDlg extends javax.swing.JDialog {
                     boutonActionPerformed(e);
                 }                
             });
-            PanneauG.add(bt);
+            PanneauD.add(bt);
         }
         this.pack();
     }
     
-    private void boutonActionPerformed(ActionEvent evt){
-        LesPersonnages lp = lstPlayers.getJoueur(indjs).getPaquet();
-        int t = lp.getTaille();JButton bt=(JButton) evt.getSource();
-        fs = bt.getName();// la proprité Name, contient ici le nom du personnage affiché sur le bouton
-        for(int i = 0; i < t; i++) {
-            JButton b = (JButton)(PanneauG.getComponent(i));
-            if (b.getName().equals(fs)){
-                b.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, new java.awt.Color(255, 0, 0)));
-            }else{
-                b.setBorder(null);
-            }
-            LesPersonnages lps = lp.getPersosFamille(fs);
-            Infos.setText("Vous pouvez récupérer "+lps.getTaille()+" personnages : \n"+lps);
+       
+    private void initFinalPanneauDroit(){
+        PanneauD.removeAll();
+        this.repaint();
+        LesPersonnages lcs = lstPlayers.getJoueur(indjs).getPaquet();
+        int t = lcs.getTaille();
+        int n = 1+(t-1)/4;
+        PanneauD.setLayout(new java.awt.GridLayout(4,n));
+        for(int x=0;x<t;x++){
+            JButton bt = new JButton();
+            PanneauD.add(bt);
         }
     }
     
+    public void dessinePanneau(JPanel jp, LesPersonnages lc){
+        int size = lc.getTaille();
+        for(int x=0;x<size;x++){
+            JButton currentJB = (JButton) jp.getComponent(x);
+            currentJB.setIcon(new ImageIcon(lc.getPerso(x).getPhoto().getScaledInstance(currentJB.getWidth(),currentJB.getHeight(), Image.SCALE_SMOOTH)));        
+        }    
+    }
+    
+    private void enableTransfertIfNeeded(){
+        if(shouldEnableTransfert()){
+            JButtonTransfert.setEnabled(true);
+        }else{
+            JButtonTransfert.setEnabled(false);
+        }
+    }
+    
+    private boolean shouldEnableTransfert(){
+        return fs!=null&&indjs!=-1&&indjs!=indj;
+    }
     /**
      * @param args the command line arguments
      */
@@ -243,10 +332,10 @@ public class TransfertDlg extends javax.swing.JDialog {
     private javax.swing.JComboBox<String> ComboJoueurs;
     private javax.swing.JButton Fermer;
     private javax.swing.JTextArea Infos;
+    private javax.swing.JButton JButtonTransfert;
     private javax.swing.JLabel Message;
     private javax.swing.JPanel PanneauD;
     private javax.swing.JPanel PanneauG;
-    private javax.swing.JButton Transfer;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

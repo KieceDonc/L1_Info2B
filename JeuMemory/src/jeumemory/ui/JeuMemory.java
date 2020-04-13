@@ -504,6 +504,7 @@ public class JeuMemory extends javax.swing.JFrame {
             diag.setVisible(true);
         } catch (Exception ex) {
             System.out.println(TAG+": This shouldn't been call ( Transfert_TestActionPerformed() )");
+            ex.printStackTrace();
         }
     }//GEN-LAST:event_Transfert_TestActionPerformed
 

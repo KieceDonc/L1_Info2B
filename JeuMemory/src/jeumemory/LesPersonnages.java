@@ -88,7 +88,7 @@ public class LesPersonnages {
     public LesPersonnages getPersosFamille(String f)
     {   LesPersonnages lp = new LesPersonnages();
         for(int i=0; i<getTaille(); i++)
-            if(getPerso(i).getFamille().equals(f))
+            if(getPerso(i).getFamille().getNom().equals(f))
                 lp.ajoutePerso(getPerso(i));
         return lp;
     }

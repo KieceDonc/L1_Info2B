@@ -53,6 +53,14 @@ public class Famille {
         this.difficulty = difficulty;
     }
     
+    public boolean equals(Famille f){
+        if(f!=null){
+            return f.getNom().equals(nom)&&f.getDifficulty()==difficulty;
+        }else{
+            return false;
+        }
+    }
+    
     @Override
     public String toString(){
         return nom;
