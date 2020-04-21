@@ -1,13 +1,19 @@
 package jeumemory.ui;
 
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.Timer;
 import jeumemory.Erreur;
 import jeumemory.Famille;
 import jeumemory.Joueur;
 import jeumemory.LesJoueurs;
 import jeumemory.LesPersonnages;
 import jeumemory.Personnage;
+import jeumemory.PlateauJeu;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -24,14 +30,20 @@ public class JeuMemory extends javax.swing.JFrame {
     
     private LesJoueurs lstPlayers = new LesJoueurs();
     private LesPersonnages lstPerso;
+    private PlateauJeu plateau;
     
     private int difficultyLvl;
+    private int l1, c1, l2, c2;// pour les cartes sélectionnées à chaque tour de jeu
     
     /**
      * Creates new form Exo3
      */
     public JeuMemory() {
         initComponents();
+        l1=-1;
+        c1=-1;
+        l2=-1;
+        c2=-1;     
     }
 
     /**
@@ -53,27 +65,7 @@ public class JeuMemory extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         demarrer = new javax.swing.JButton();
         recommencer = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
-        jBImg1 = new javax.swing.JButton();
-        jBImg2 = new javax.swing.JButton();
-        jBImg3 = new javax.swing.JButton();
-        jBImg4 = new javax.swing.JButton();
-        jBImg5 = new javax.swing.JButton();
-        jBImg6 = new javax.swing.JButton();
-        jBImg7 = new javax.swing.JButton();
-        jBImg8 = new javax.swing.JButton();
-        jBImg9 = new javax.swing.JButton();
-        jBImg10 = new javax.swing.JButton();
-        jBImg11 = new javax.swing.JButton();
-        jBImg12 = new javax.swing.JButton();
-        jBImg13 = new javax.swing.JButton();
-        jBImg14 = new javax.swing.JButton();
-        jBImg15 = new javax.swing.JButton();
-        jBImg16 = new javax.swing.JButton();
-        jBImg17 = new javax.swing.JButton();
-        jBImg18 = new javax.swing.JButton();
-        jBImg19 = new javax.swing.JButton();
-        jBImg20 = new javax.swing.JButton();
+        jPanelPlateau = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         Options = new javax.swing.JMenuItem();
@@ -127,149 +119,8 @@ public class JeuMemory extends javax.swing.JFrame {
 
         getContentPane().add(jPanel4, java.awt.BorderLayout.WEST);
 
-        jPanel3.setLayout(new java.awt.GridLayout(4, 5));
-
-        jBImg1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBImg1ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jBImg1);
-
-        jBImg2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBImg2ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jBImg2);
-
-        jBImg3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBImg3ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jBImg3);
-
-        jBImg4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBImg4ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jBImg4);
-
-        jBImg5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBImg5ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jBImg5);
-
-        jBImg6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBImg6ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jBImg6);
-
-        jBImg7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBImg7ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jBImg7);
-
-        jBImg8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBImg8ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jBImg8);
-
-        jBImg9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBImg9ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jBImg9);
-
-        jBImg10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBImg10ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jBImg10);
-
-        jBImg11.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBImg11ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jBImg11);
-
-        jBImg12.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBImg12ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jBImg12);
-
-        jBImg13.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBImg13ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jBImg13);
-
-        jBImg14.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBImg14ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jBImg14);
-
-        jBImg15.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBImg15ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jBImg15);
-
-        jBImg16.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBImg16ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jBImg16);
-
-        jBImg17.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBImg17ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jBImg17);
-
-        jBImg18.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBImg18ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jBImg18);
-
-        jBImg19.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBImg19ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jBImg19);
-
-        jBImg20.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBImg20ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jBImg20);
-
-        getContentPane().add(jPanel3, java.awt.BorderLayout.CENTER);
+        jPanelPlateau.setLayout(new java.awt.GridLayout(4, 5));
+        getContentPane().add(jPanelPlateau, java.awt.BorderLayout.CENTER);
 
         jMenu1.setText("Paramètres");
 
@@ -361,96 +212,30 @@ public class JeuMemory extends javax.swing.JFrame {
         visuJoueursDlg.setVisible(true);    
     }//GEN-LAST:event_JoueurActionPerformed
 
-    private void jBImg1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBImg1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBImg1ActionPerformed
-
-    private void jBImg2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBImg2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBImg2ActionPerformed
-
-    private void jBImg3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBImg3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBImg3ActionPerformed
-
-    private void jBImg4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBImg4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBImg4ActionPerformed
-
-    private void jBImg5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBImg5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBImg5ActionPerformed
-
-    private void jBImg6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBImg6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBImg6ActionPerformed
-
-    private void jBImg7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBImg7ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBImg7ActionPerformed
-
-    private void jBImg8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBImg8ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBImg8ActionPerformed
-
-    private void jBImg9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBImg9ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBImg9ActionPerformed
-
-    private void jBImg10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBImg10ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBImg10ActionPerformed
-
-    private void jBImg11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBImg11ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBImg11ActionPerformed
-
-    private void jBImg12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBImg12ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBImg12ActionPerformed
-
-    private void jBImg13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBImg13ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBImg13ActionPerformed
-
-    private void jBImg14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBImg14ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBImg14ActionPerformed
-
-    private void jBImg15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBImg15ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBImg15ActionPerformed
-
-    private void jBImg16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBImg16ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBImg16ActionPerformed
-
-    private void jBImg17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBImg17ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBImg17ActionPerformed
-
-    private void jBImg18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBImg18ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBImg18ActionPerformed
-
-    private void jBImg19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBImg19ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBImg19ActionPerformed
-
-    private void jBImg20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBImg20ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBImg20ActionPerformed
-
     private void demarrerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demarrerActionPerformed
-        if(lstPlayers.getNbJoueurs()>2){ // pour démarrer le jeu, il doit y avoir au moins 2 joueurs
+        if(lstPlayers.getNbJoueurs()>=2){ // pour démarrer le jeu, il doit y avoir au moins 2 joueurs
             if(difficultyLvl!=0){
-                if(lstPlayers.arePlayersValidCompareToDifficulty(difficultyLvl)){ // on vérifie si les joueurs ont tous choisi une famille préféré qui est dans le niveau de difficulté
+                if(lstPlayers.arePlayersValidCompareToDifficulty(difficultyLvl)){ // on vérifie si les joueurs ont tous choisi une famille préférée qui est dans le niveau de difficulté
                     demarrer.setEnabled(false); // on supprime la possibilité de réappuyer sur le boutton démarré
                     Options.setEnabled(false); // on supprime la possibilité de réappuyer sur le boutton démarré
                     AjoutJoueur.setEnabled(false);  // on supprime la possibilité de réappuyer sur le boutton ajouté un joueur
                     recommencer.setEnabled(true); 
                     Joueur.setEnabled(true); // Le bouton joueur dans le menu option menu est maintenant disponible 
                     Cartes.setEnabled(true); // Le bouton cartes dans le menu option menu est maintenant disponible
+                    plateau = new PlateauJeu(difficultyLvl);
+                    jPanelPlateau.setLayout(new GridLayout(plateau.getNbLig(),plateau.getNbCol()));
+                    for(int x=0;x<difficultyLvl;x++){
+                        JButton current = new JButton();
+                        current.setName(String.valueOf(x));
+                        current.addActionListener(new ActionListener(){
+                            @Override
+                            public void actionPerformed(ActionEvent evt){
+                                boutonActionPerformed(evt);
+                            }
+                        });
+                        jPanelPlateau.add(current);
+                    }
+                    this.pack();
                 }else{
                     showErrorDlg(Erreur.PlayerSelectedFamillyNotInRange);
                 }
@@ -501,6 +286,8 @@ public class JeuMemory extends javax.swing.JFrame {
             this.lstPlayers.ajouteJoueur(j1);
             this.lstPlayers.ajouteJoueur(j2);
             TransfertDlg diag = new TransfertDlg(this,true,lstPlayers,null);
+            diag.setSize(600,600);
+
             diag.setVisible(true);
         } catch (Exception ex) {
             System.out.println(TAG+": This shouldn't been call ( Transfert_TestActionPerformed() )");
@@ -529,9 +316,39 @@ public class JeuMemory extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_Bataille_TestActionPerformed
 
+    private void boutonActionPerformed(java.awt.event.ActionEvent evt){
+        JButton current = (JButton) evt.getSource(); // on récupère le bouton qui a été cliqué
+        String num = current.getName(); // on réucpère le numéro du bouton
+        int[] position = plateau.getCase(Integer.parseInt(num)); // on récupère la position du bouton par rapport au plateau
+        Personnage perso = lstPerso.getPerso(plateau.getCase(position[0], position[1])); // on récupère le personnage qui correspond au button
+        current.setIcon(new ImageIcon(perso.getPhoto())); // on affiche son image
+        if(l1==-1&&c1==-1){ // on enregistre les coordonnées du boutton cliqué
+            l1 = position[0];
+            c1 = position[1];
+        }else{
+            l2 = position[0];
+            c2 = position[1];
+            startTimer();
+        }
+    }
+    
     private void showErrorDlg(String error){
         ErrorDlg errorDlg = new ErrorDlg(this,true,error);
         errorDlg.setVisible(true);
+    }
+    
+    public void startTimer(){// définit un timer qui lance la vérification des deux personnages au bout d'une demi-seconde
+        Timer t = new Timer(500, new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent ae){
+                verifPersos();
+            }
+        });
+        t.setRepeats(false);t.start();
+    }
+    
+    public void verifPersos(){
+        
     }
     
     /**
@@ -578,26 +395,6 @@ public class JeuMemory extends javax.swing.JFrame {
     private javax.swing.JMenuItem Options;
     private javax.swing.JMenuItem Transfert_Test;
     private javax.swing.JButton demarrer;
-    private javax.swing.JButton jBImg1;
-    private javax.swing.JButton jBImg10;
-    private javax.swing.JButton jBImg11;
-    private javax.swing.JButton jBImg12;
-    private javax.swing.JButton jBImg13;
-    private javax.swing.JButton jBImg14;
-    private javax.swing.JButton jBImg15;
-    private javax.swing.JButton jBImg16;
-    private javax.swing.JButton jBImg17;
-    private javax.swing.JButton jBImg18;
-    private javax.swing.JButton jBImg19;
-    private javax.swing.JButton jBImg2;
-    private javax.swing.JButton jBImg20;
-    private javax.swing.JButton jBImg3;
-    private javax.swing.JButton jBImg4;
-    private javax.swing.JButton jBImg5;
-    private javax.swing.JButton jBImg6;
-    private javax.swing.JButton jBImg7;
-    private javax.swing.JButton jBImg8;
-    private javax.swing.JButton jBImg9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -607,8 +404,8 @@ public class JeuMemory extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanelPlateau;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextAreaInfo;
     private javax.swing.JButton recommencer;

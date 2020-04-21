@@ -11,13 +11,13 @@ package jeumemory;
  */
 public class PlateauJeu {
     
-    private int tab[][];
+    private int tab[][]; // plateau de jeu à 2 dimensions
     private int nbp; // nombre de personnages sur le plateau qui diminue au cours du jeu
-    private int nblig;
-    private int nbcol;
+    private int nblig; // nombre total de ligne
+    private int nbcol; // nombre total de colonne 
     
     public PlateauJeu(int n){
-        this. nbp=n;
+        this.nbp=n;
         this.nblig=(int)(Math.sqrt(nbp*2));
         this.nbcol=nbp*2/nblig;
         this.tab=new int [this.nblig][this.nbcol];
@@ -46,6 +46,25 @@ public class PlateauJeu {
     
     public int getCase(int l, int c){
         return tab[l][c];
+    }
+    
+    /**
+     * Permet de récupérer la position d'une case dans la plateau par rapport à son numéro ( ex : nbCoder = 8 alors pour un plateau 3*3 la 8 ième case : l = 2 et c = 2 )
+     * @param nbCoder 
+     * @return 
+     * 
+     *   Colonne n°0 1 2
+     *             _ _ _
+     *Ligne n°0   |1 2 3|
+     *        1   |4 5 6|
+     *        2   |7 8 9|
+     *             ¯ ¯ ¯
+     * 
+     */
+    public int[] getCase(int nbCoder){
+        int l = (int) (Math.ceil(nbCoder/nblig))-1;
+        int c = l*nblig*-1+nbCoder-1;
+        return new int[]{l,c};
     }
     
     public int getNbc(){

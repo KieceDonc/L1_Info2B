@@ -111,29 +111,17 @@ public class LesPersonnages {
             this.persos.remove(index);
         }
     }
+
     
-   public LesPersonnages retirePersos(int n)
-    { LesPersonnages lcr = new LesPersonnages();
-        for (int i=0; i<=n; i++)
-        {
-            lcr.ajoutePerso(getPerso(0));
-            this.persos.remove(0);  
-        }
-        return lcr;
-    } 
-    
-    public LesPersonnages retirePersosFamille(String f)
-    { 
-        LesPersonnages lcr = new LesPersonnages();
-        int i = 0;
-        while(i<getTaille()){
-            if (getPerso(i).getFamille().equals(f)) {
-                lcr.ajoutePerso(getPerso(i));
-                this.persos.remove(i);  
+    public void retirePersosFamille(String f){ 
+        ArrayList<Personnage> newArray = new ArrayList();
+        for(int x=0;x<getTaille();x++){
+            Personnage current = persos.get(x);
+            if(!current.getFamille().getNom().equals(f)){
+                newArray.add(current);
             }
-            else i++;
         }
-        return lcr;
+        this.persos = newArray;
     }
     
     public ArrayList<String> getStringToutesLesFamilles(){

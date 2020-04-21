@@ -5,6 +5,7 @@
  */
 package jeumemory.ui;
 
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -175,6 +176,9 @@ public class TransfertDlg extends javax.swing.JDialog {
             initPanneauGauche();
             initFinalPanneauDroit();
             JButtonTransfert.setEnabled(false);
+            System.out.println(jCourant.getEnPossession().toString());
+            System.out.println(jCible.getEnPossession().toString());
+
         }else{
             Infos.setText("Il est nécessaire de sélectionner un joueur qui a au moins une carte");
         }
@@ -197,6 +201,7 @@ public class TransfertDlg extends javax.swing.JDialog {
         Infos.setText("Vous pouvez récupérer "+lps.getTaille()+" personnages : \n"+lps);
         enableTransfertIfNeeded();
     }
+    
     private void initCombo(){
        for(int x=0;x<lstPlayers.getNbJoueurs();x++){
            ComboJoueurs.addItem(lstPlayers.getJoueur(x).getPseudo());
@@ -220,7 +225,7 @@ public class TransfertDlg extends javax.swing.JDialog {
     private void initPanneauGauche(){
         PanneauG.removeAll();
         this.repaint();
-        LesPersonnages lcs = lstPlayers.getJoueur(indjs).getPaquet();
+        LesPersonnages lcs = lstPlayers.getJoueur(indj).getPaquet();
         int t = lcs.getTaille();
         int n = 1+(t-1)/4;
         PanneauG.setLayout(new java.awt.GridLayout(4,n));
@@ -228,6 +233,8 @@ public class TransfertDlg extends javax.swing.JDialog {
             JButton bt = new JButton();
             PanneauG.add(bt);
         }
+        this.pack();
+        dessinePanneau(PanneauG,lstPlayers.getJoueur(indj).getPaquet());
         setupFinished = true; 
     }
    
@@ -250,6 +257,8 @@ public class TransfertDlg extends javax.swing.JDialog {
             PanneauD.add(bt);
         }
         this.pack();
+        dessinePanneau(PanneauD,lstPlayers.getJoueur(indjs).getPaquet());
+
     }
     
        
