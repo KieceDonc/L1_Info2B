@@ -31,7 +31,13 @@ public class Famille {
     
     private String nom; 
     private int difficulty; // difficulty représente le niveau de difficulté à partir du quel on retrouve pour la première fois cette famille
-
+    private int nbMaxPerso; // représente le maximun de personnage de cette famille en fonction du niveau de difficulté du jeu
+    
+    public Famille(String nom,int difficulty) {
+        this.nom = nom;
+        this.difficulty = difficulty;
+    }
+    
     public String getNom() {
         return nom;
     }
@@ -48,10 +54,14 @@ public class Famille {
         this.difficulty = difficulty;
     }
 
-    public Famille(String nom,int difficulty) {
-        this.nom = nom;
-        this.difficulty = difficulty;
+    public int getNbMaxPerso() {
+        return nbMaxPerso;
     }
+
+    public void setNbMaxPerso(int nbMaxPerso) {
+        this.nbMaxPerso = nbMaxPerso;
+    }
+    
     
     public boolean equals(Famille f){
         if(f!=null){

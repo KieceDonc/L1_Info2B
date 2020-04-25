@@ -45,7 +45,7 @@ public class TransfertDlg extends javax.swing.JDialog {
     /**
      * Creates new form TransferDlg
      */
-    public TransfertDlg(java.awt.Frame parent, boolean modal, LesJoueurs lstPlayers, setOnTransferSucceed listener) {
+    public TransfertDlg(java.awt.Frame parent, boolean modal, LesJoueurs lstPlayers,int indj, setOnTransferSucceed listener) {
         super(parent, modal);
         initComponents();        
         this.lstPlayers = lstPlayers;
@@ -174,7 +174,7 @@ public class TransfertDlg extends javax.swing.JDialog {
         System.out.println(result);
         if(result>0){
             initPanneauGauche();
-            initFinalPanneauDroit();
+            initPanneauDroit();
             JButtonTransfert.setEnabled(false);
             System.out.println(jCourant.getEnPossession().toString());
             System.out.println(jCible.getEnPossession().toString());
@@ -228,9 +228,11 @@ public class TransfertDlg extends javax.swing.JDialog {
         LesPersonnages lcs = lstPlayers.getJoueur(indj).getPaquet();
         int t = lcs.getTaille();
         int n = 1+(t-1)/4;
-        PanneauG.setLayout(new java.awt.GridLayout(4,n));
+        PanneauG.setLayout(new java.awt.GridLayout(0,n));
+        int buttonSize=this.getWidth()/(3*n);
         for(int x=0;x<t;x++){
             JButton bt = new JButton();
+            bt.setPreferredSize(new Dimension(buttonSize,buttonSize));
             PanneauG.add(bt);
         }
         this.pack();
@@ -244,9 +246,11 @@ public class TransfertDlg extends javax.swing.JDialog {
         LesPersonnages lcs = lstPlayers.getJoueur(indjs).getPaquet();
         int t = lcs.getTaille();
         int n = 1+(t-1)/4;
-        PanneauD.setLayout(new java.awt.GridLayout(4,n));
+        PanneauD.setLayout(new java.awt.GridLayout(0,n));
+        int buttonSize=this.getWidth()/(3*n);
         for(int x=0;x<t;x++){
             JButton bt = new JButton();
+            bt.setPreferredSize(new Dimension(buttonSize,buttonSize));
             bt.setName(lcs.getPerso(x).getFamille().getNom());
             bt.addActionListener(new ActionListener(){
                 @Override
@@ -259,20 +263,6 @@ public class TransfertDlg extends javax.swing.JDialog {
         this.pack();
         dessinePanneau(PanneauD,lstPlayers.getJoueur(indjs).getPaquet());
 
-    }
-    
-       
-    private void initFinalPanneauDroit(){
-        PanneauD.removeAll();
-        this.repaint();
-        LesPersonnages lcs = lstPlayers.getJoueur(indjs).getPaquet();
-        int t = lcs.getTaille();
-        int n = 1+(t-1)/4;
-        PanneauD.setLayout(new java.awt.GridLayout(4,n));
-        for(int x=0;x<t;x++){
-            JButton bt = new JButton();
-            PanneauD.add(bt);
-        }
     }
     
     public void dessinePanneau(JPanel jp, LesPersonnages lc){
@@ -325,7 +315,7 @@ public class TransfertDlg extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                TransfertDlg dialog = new TransfertDlg(new javax.swing.JFrame(), true,null,null);
+                TransfertDlg dialog = new TransfertDlg(new javax.swing.JFrame(), true,null,0,null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

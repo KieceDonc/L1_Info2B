@@ -117,6 +117,30 @@ public class LesJoueurs {
         return allPlayerValid;
     }
     
+    /**
+     * @return Liste de joueur qui ont atteint le plus haut score 
+     * @throws java.lang.Exception 
+     */
+    public LesJoueurs getGagnant() throws Exception{
+        int maxPoint = 0;
+        LesJoueurs gagnant = new LesJoueurs();
+        for(int x=0;x<listJ.size();x++){
+            Joueur currentPlayer = listJ.get(x);
+            int joueurPoint =currentPlayer.getEnPossession().getScore();
+            
+            if(joueurPoint==maxPoint){
+                gagnant.ajouteJoueur(currentPlayer);
+                
+            }else if(joueurPoint>maxPoint){
+                gagnant = new LesJoueurs();
+                gagnant.ajouteJoueur(currentPlayer);
+                maxPoint = joueurPoint;
+                
+            }
+        }
+        return gagnant;
+    }
+    
     public String toString(){
         String toReturn ="";
         for(int x=0;x<listJ.size();x++){

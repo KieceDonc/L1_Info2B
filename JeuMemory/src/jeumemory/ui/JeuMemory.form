@@ -122,22 +122,22 @@
             <Property name="rows" type="int" value="3"/>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="jLabel1">
+            <Component class="javax.swing.JLabel" name="JLabelShowNbPersoFounded">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Work in progress"/>
+                <Property name="text" type="java.lang.String" value=" "/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel2">
+            <Component class="javax.swing.JLabel" name="JLabelShowNbPersoLeft">
               <Properties>
-                <Property name="text" type="java.lang.String" value="WIP"/>
+                <Property name="text" type="java.lang.String" value=" "/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel3">
+            <Component class="javax.swing.JLabel" name="JLabelShowHowMustPlay">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Dialog" size="18" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="WIP"/>
+                <Property name="text" type="java.lang.String" value=" "/>
               </Properties>
             </Component>
           </SubComponents>

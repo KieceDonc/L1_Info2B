@@ -1,6 +1,8 @@
 package jeumemory.ui;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
@@ -9,6 +11,7 @@ import javax.swing.JDialog;
 import javax.swing.Timer;
 import jeumemory.Erreur;
 import jeumemory.Famille;
+import jeumemory.Jeu;
 import jeumemory.Joueur;
 import jeumemory.LesJoueurs;
 import jeumemory.LesPersonnages;
@@ -31,6 +34,7 @@ public class JeuMemory extends javax.swing.JFrame {
     private LesJoueurs lstPlayers = new LesJoueurs();
     private LesPersonnages lstPerso;
     private PlateauJeu plateau;
+    private Jeu jeu;
     
     private int difficultyLvl;
     private int l1, c1, l2, c2;// pour les cartes sélectionnées à chaque tour de jeu
@@ -57,9 +61,9 @@ public class JeuMemory extends javax.swing.JFrame {
 
         jPanel4 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        JLabelShowNbPersoFounded = new javax.swing.JLabel();
+        JLabelShowNbPersoLeft = new javax.swing.JLabel();
+        JLabelShowHowMustPlay = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextAreaInfo = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
@@ -83,15 +87,15 @@ public class JeuMemory extends javax.swing.JFrame {
 
         jPanel1.setLayout(new java.awt.GridLayout(3, 1));
 
-        jLabel1.setText("Work in progress");
-        jPanel1.add(jLabel1);
+        JLabelShowNbPersoFounded.setText(" ");
+        jPanel1.add(JLabelShowNbPersoFounded);
 
-        jLabel2.setText("WIP");
-        jPanel1.add(jLabel2);
+        JLabelShowNbPersoLeft.setText(" ");
+        jPanel1.add(JLabelShowNbPersoLeft);
 
-        jLabel3.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel3.setText("WIP");
-        jPanel1.add(jLabel3);
+        JLabelShowHowMustPlay.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        JLabelShowHowMustPlay.setText(" ");
+        jPanel1.add(JLabelShowHowMustPlay);
 
         jPanel4.add(jPanel1, java.awt.BorderLayout.NORTH);
 
@@ -204,6 +208,7 @@ public class JeuMemory extends javax.swing.JFrame {
             }
         }
         });
+        opt.setSize(600,400);
         opt.setVisible(true);
     }//GEN-LAST:event_OptionsActionPerformed
 
@@ -222,12 +227,14 @@ public class JeuMemory extends javax.swing.JFrame {
                     recommencer.setEnabled(true); 
                     Joueur.setEnabled(true); // Le bouton joueur dans le menu option menu est maintenant disponible 
                     Cartes.setEnabled(true); // Le bouton cartes dans le menu option menu est maintenant disponible
-                    plateau = new PlateauJeu(difficultyLvl);
-                    jPanelPlateau.setLayout(new GridLayout(plateau.getNbLig(),plateau.getNbCol()));
-                    for(int x=0;x<difficultyLvl;x++){
+                    plateau = new PlateauJeu(difficultyLvl); // on initialise le plateau de jeu en donnant en paramètre le niveau de difficulté qui correspond également au nombre de carte
+                    plateau.initPlateauJeu();
+                    jPanelPlateau.setLayout(new GridLayout(0,plateau.getNbCol()));
+                    for(int x=0;x<difficultyLvl*2;x++){ // on crée un bouton pour chaque chaque
                         JButton current = new JButton();
+                        current.setPreferredSize(new Dimension(150,150));
                         current.setName(String.valueOf(x));
-                        current.addActionListener(new ActionListener(){
+                        current.addActionListener(new ActionListener(){ 
                             @Override
                             public void actionPerformed(ActionEvent evt){
                                 boutonActionPerformed(evt);
@@ -235,6 +242,10 @@ public class JeuMemory extends javax.swing.JFrame {
                         });
                         jPanelPlateau.add(current);
                     }
+                    jeu = new Jeu(lstPerso,lstPlayers,difficultyLvl*2);
+                    showWhoMustPlay(jeu.getJoueurCourant().getPseudo());
+                    showNbPersoRestant(difficultyLvl);
+                    showNbPersoFounded(0);
                     this.pack();
                 }else{
                     showErrorDlg(Erreur.PlayerSelectedFamillyNotInRange);
@@ -275,45 +286,15 @@ public class JeuMemory extends javax.swing.JFrame {
     }//GEN-LAST:event_CartesActionPerformed
 
     private void Transfert_TestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Transfert_TestActionPerformed
-        try {
-            lstPlayers = new LesJoueurs();
-            Joueur j1=new Joueur("FanMemory0", Famille.communs);
-            j1.initPaquetTest();
-            Joueur j2=new Joueur("FanMemory1", Famille.communs);
-            j2.getPaquet().ajoutePerso(new Personnage(Famille.epiques, "burnout", 20));
-            j2.getPaquet().ajoutePerso(new Personnage(Famille.epiques, "funk-ops", 30));
-            j2.getPaquet().ajoutePerso(new Personnage(Famille.alpinsFemmes, "mogul-master", 10));
-            this.lstPlayers.ajouteJoueur(j1);
-            this.lstPlayers.ajouteJoueur(j2);
-            TransfertDlg diag = new TransfertDlg(this,true,lstPlayers,null);
-            diag.setSize(600,600);
-
-            diag.setVisible(true);
-        } catch (Exception ex) {
-            System.out.println(TAG+": This shouldn't been call ( Transfert_TestActionPerformed() )");
-            ex.printStackTrace();
-        }
+        TransfertDlg diag = new TransfertDlg(this,true,getExampleLesJoueurs(),null);
+        diag.setSize(600,600);
+        diag.setVisible(true);
     }//GEN-LAST:event_Transfert_TestActionPerformed
 
     private void Bataille_TestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Bataille_TestActionPerformed
-        // ajout de cartes aux2 premiers joueurs 
-        try {
-            lstPlayers = new LesJoueurs();
-            Joueur j1=new Joueur("FanMemory0", Famille.communs);
-            j1.initPaquetTest();
-            Joueur j2=new Joueur("FanMemory1", Famille.communs);
-            j2.getPaquet().ajoutePerso(new Personnage(Famille.epiques, "burnout", 20));
-            j2.getPaquet().ajoutePerso(new Personnage(Famille.epiques, "funk-ops", 30));
-            j2.getPaquet().ajoutePerso(new Personnage(Famille.alpinsFemmes, "mogul-master", 10));
-            this.lstPlayers.ajouteJoueur(j1);
-            this.lstPlayers.ajouteJoueur(j2);
-            BatailleDlg diag = new BatailleDlg(this, true,lstPlayers,0);
-            diag.setSize(1000,600);
-            diag.setVisible(true);
-        } catch (Exception ex) {
-            System.out.println(TAG+": This shouldn't been call ( Bataille_TestActionPerformed() )\n");
-            ex.printStackTrace();
-        }
+        BatailleDlg diag = new BatailleDlg(this, true,getExampleLesJoueurs(),0);
+        diag.setSize(1000,600);
+        diag.setVisible(true);
     }//GEN-LAST:event_Bataille_TestActionPerformed
 
     private void boutonActionPerformed(java.awt.event.ActionEvent evt){
@@ -321,7 +302,8 @@ public class JeuMemory extends javax.swing.JFrame {
         String num = current.getName(); // on réucpère le numéro du bouton
         int[] position = plateau.getCase(Integer.parseInt(num)); // on récupère la position du bouton par rapport au plateau
         Personnage perso = lstPerso.getPerso(plateau.getCase(position[0], position[1])); // on récupère le personnage qui correspond au button
-        current.setIcon(new ImageIcon(perso.getPhoto())); // on affiche son image
+        System.out.println(plateau.getCase(position[0], position[1]));
+        current.setIcon(new ImageIcon(perso.getPhoto().getScaledInstance(current.getWidth(), current.getHeight(), Image.SCALE_SMOOTH))); // on affiche son image
         if(l1==-1&&c1==-1){ // on enregistre les coordonnées du boutton cliqué
             l1 = position[0];
             c1 = position[1];
@@ -337,6 +319,19 @@ public class JeuMemory extends javax.swing.JFrame {
         errorDlg.setVisible(true);
     }
     
+    private void showNbPersoFounded(int nb){
+        JLabelShowNbPersoFounded.setText("Nb de personnages trouvés : "+nb);
+    }
+    
+    private void showNbPersoRestant(int nb){
+        JLabelShowNbPersoLeft.setText("Nb de personnages restants : "+nb);
+    }
+    
+    private void showWhoMustPlay(String name){
+        JLabelShowHowMustPlay.setText("C'est à "+name+" de jouer !");
+    }
+    
+        
     public void startTimer(){// définit un timer qui lance la vérification des deux personnages au bout d'une demi-seconde
         Timer t = new Timer(500, new ActionListener(){
             @Override
@@ -348,7 +343,82 @@ public class JeuMemory extends javax.swing.JFrame {
     }
     
     public void verifPersos(){
-        
+        if(plateau.getCase(l1,c1)==plateau.getCase(l2, c2)){ // les personnages des deux cartes sont identiques
+            int result = jeu.traiterTour(jeu.getJoueurCourant(), plateau.getCase(l1, c1));
+            switch(result){
+                case 0:{
+                    jTextAreaInfo.append(jeu.getJoueurCourant().getPseudo()+" a gagné !\n\n");            
+                    break;
+                }
+                case 1:{
+                    TransfertDlg diag = new TransfertDlg(this,true,getExampleLesJoueurs(),null);
+                    diag.setSize(600,600);
+                    diag.setVisible(true);
+                    break;
+                }
+                case 2:{
+                    break;
+                }
+            }
+            jeu.setIndiceJoueurCourant(jeu.getIndiceJoueurCourant()+1);//Le joueur courant change et est fixé au joueur suivant.
+            plateau.invalide(l1, c1, l2, c2);
+            if(plateau.jeuVide()){
+                boolean moreThanOneWinner = false;
+                String toShow ="";
+                try{
+                    LesJoueurs Gagnant = lstPlayers.getGagnant();
+                    if(Gagnant.getNbJoueurs()==0){
+                       toShow= Gagnant.getJoueur(0).getPseudo();
+                    }else{
+                        moreThanOneWinner=true;
+                        for(int x=0;x<Gagnant.getNbJoueurs();x++){ // on récupère le pseudo de tout les gagnants
+                            toShow+=Gagnant.getJoueur(x).getPseudo()+" ";
+                        }
+                    }
+                    if(moreThanOneWinner){
+                        jTextAreaInfo.append(toShow+" ont gagné !\n\n");            
+                    }else{
+                        jTextAreaInfo.append(toShow+" a gagné !\n\n");            
+                    }
+                }catch(Exception ex){
+                    System.out.println("This shoudln't be called ( at showWinner_s() )");
+                }
+            }else{
+                
+            }
+            showWhoMustPlay(jeu.getJoueurCourant().getPseudo());
+            showNbPersoRestant(plateau.getNbp());
+            showNbPersoFounded(difficultyLvl-plateau.getNbp());
+        }else{
+            
+            TransfertDlg diag = new TransfertDlg(this,true,getExampleLesJoueurs(),null);
+            diag.setSize(600,600);
+            diag.setVisible(true);
+
+        }
+        l1=-1;
+        c1=-1;
+        l2=-1;
+        c2=-1;
+    }
+    
+    public LesJoueurs getExampleLesJoueurs(){
+        LesJoueurs toReturn=null;
+        try{
+            toReturn = new LesJoueurs();
+            Joueur j1 = new Joueur("Joueur 1", Famille.communs);
+            j1.initPaquetTest();
+            Joueur j2 = new Joueur("Joueur 2", Famille.communs);
+            j2.getPaquet().ajoutePerso(new Personnage(Famille.epiques, "burnout", 20));
+            j2.getPaquet().ajoutePerso(new Personnage(Famille.epiques, "funk-ops", 30));
+            j2.getPaquet().ajoutePerso(new Personnage(Famille.alpinsFemmes, "mogul-master", 10));
+            toReturn.ajouteJoueur(j1);
+            toReturn.ajouteJoueur(j2);
+        }catch (Exception ex) {
+            System.out.println(TAG+": This shouldn't been call ( getExampleLesJoueurs )");
+            ex.printStackTrace();
+        }
+        return toReturn;
     }
     
     /**
@@ -391,13 +461,13 @@ public class JeuMemory extends javax.swing.JFrame {
     private javax.swing.JMenuItem AjoutJoueur;
     private javax.swing.JMenuItem Bataille_Test;
     private javax.swing.JMenuItem Cartes;
+    private javax.swing.JLabel JLabelShowHowMustPlay;
+    private javax.swing.JLabel JLabelShowNbPersoFounded;
+    private javax.swing.JLabel JLabelShowNbPersoLeft;
     private javax.swing.JMenuItem Joueur;
     private javax.swing.JMenuItem Options;
     private javax.swing.JMenuItem Transfert_Test;
     private javax.swing.JButton demarrer;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;

@@ -16,7 +16,7 @@ public class PlateauJeu {
     private int nblig; // nombre total de ligne
     private int nbcol; // nombre total de colonne 
     
-    public PlateauJeu(int n){
+    public PlateauJeu(int n){ // n = niveau de difficulté, pas le nombre de cae ! ( le constructeur calcul automatiquement le nombre de case ! ( difficulty*2 ))
         this.nbp=n;
         this.nblig=(int)(Math.sqrt(nbp*2));
         this.nbcol=nbp*2/nblig;
@@ -36,6 +36,9 @@ public class PlateauJeu {
         return this.nbcol;  
     }
     
+    /**
+     * @return nombre de personnage restant sur le plateau
+     */
     public int getNbp(){   
         return this.nbp;
     }
@@ -50,7 +53,7 @@ public class PlateauJeu {
     
     /**
      * Permet de récupérer la position d'une case dans la plateau par rapport à son numéro ( ex : nbCoder = 8 alors pour un plateau 3*3 la 8 ième case : l = 2 et c = 2 )
-     * @param nbCoder 
+     * @param caseCoder
      * @return 
      * 
      *   Colonne n°0 1 2
@@ -61,9 +64,9 @@ public class PlateauJeu {
      *             ¯ ¯ ¯
      * 
      */
-    public int[] getCase(int nbCoder){
-        int l = (int) (Math.ceil(nbCoder/nblig))-1;
-        int c = l*nblig*-1+nbCoder-1;
+    public int[] getCase(int caseCoder){
+        int l=(int)Math.floor(caseCoder/(double)nbcol);
+        int c= caseCoder-l*nbcol;
         return new int[]{l,c};
     }
     
@@ -122,5 +125,4 @@ public class PlateauJeu {
         }
         nbp=0;
     }
-
 }
