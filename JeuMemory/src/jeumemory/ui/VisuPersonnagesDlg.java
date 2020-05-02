@@ -125,6 +125,9 @@ public class VisuPersonnagesDlg extends javax.swing.JDialog {
      * @return 
      */
     private int getSquareDim(int nbCharacter){
+        if(nbCharacter==1){
+            return 1;
+        }
         int currentP =-1;
         boolean founded=false;
         do{

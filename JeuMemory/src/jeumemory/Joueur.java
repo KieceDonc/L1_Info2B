@@ -114,6 +114,14 @@ public class Joueur {
         return false;
     }
     
+    /**
+     * Supprime tout les données de cette instance de Joueur permettant un nouveau tour
+     */
+    public void wipeData(){
+        enPossession = new LesPersonnages();
+        score = 0;
+    }
+    
     public boolean equals(Joueur j){
         return j.getPseudo().equals(this.pseudo)
                /*&&

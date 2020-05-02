@@ -99,6 +99,14 @@ public class LesJoueurs {
         }
     }
     
+    /**
+     * Supprime toutes les données des joueurs pour permettre un nouveau tour
+     */
+    public void wipeDataForEveryPlayer(){
+        for(int x=0;x<listJ.size();x++){
+            listJ.get(x).wipeData();
+        }
+    }
      /**
      * on souhaite vérifié si les joueurs ont tous choisi une famille préféré qui est dans le niveau de difficulté
      * @param chosenDifficulty 
