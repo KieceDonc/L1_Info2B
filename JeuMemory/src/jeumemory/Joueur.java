@@ -135,7 +135,7 @@ public class Joueur {
     }
 
     public String toString() {
-        String toReturn = "Joueur " + pseudo + "\nfamille préféré:";
+        String toReturn = "Joueur " + pseudo + "\nFamille préféré:";
         
         if(famillepref==null){
             toReturn+=" aucune";
@@ -143,15 +143,15 @@ public class Joueur {
             toReturn+=" "+famillepref.toString();
         }
         
-        toReturn+="\nen possession des personnages:";
+        toReturn+="\nEn possession des personnages:\n";
         
-        if(enPossession==null){
-            toReturn+=" aucun";
+        if(enPossession==null||enPossession.getTaille()==0){
+            toReturn+="aucun personnage\n";
         }else{
             toReturn+=" "+enPossession.toString();
         }
         
-        toReturn+="\nscore :" + score;
+        toReturn+="Score :" + score;
         
         return toReturn;
    }

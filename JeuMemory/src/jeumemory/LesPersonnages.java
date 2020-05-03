@@ -101,11 +101,13 @@ public class LesPersonnages {
         else return null;
     }
     
-    public LesPersonnages getPersosFamille(String f)
-    {   LesPersonnages lp = new LesPersonnages();
-        for(int i=0; i<getTaille(); i++)
-            if(getPerso(i).getFamille().getNom().equals(f))
-                lp.ajoutePerso(getPerso(i));
+    public LesPersonnages getPersosFamille(String f){
+        LesPersonnages lp = new LesPersonnages();
+        for(int i=0; i<getTaille(); i++){
+            if(getPerso(i).getFamille().getNom().equals(f)){
+                lp.ajoutePerso(getPerso(i));                
+            }
+        }
         return lp;
     }
     
@@ -175,12 +177,15 @@ public class LesPersonnages {
             this.ajoutePerso(personnages.getPerso(x));
         }
     }
-	@Override
+
+    @Override
     public String toString() {
         String s = "";
         for(int i=0; i<getTaille(); i++)
-            s+=i+"- "+getPerso(i).toString();
+            s+=i+"- "+getPerso(i).toString()+"\n";
        return s;
     }
+    
+    
 }
 

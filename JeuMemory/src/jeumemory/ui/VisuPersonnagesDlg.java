@@ -7,6 +7,7 @@ package jeumemory.ui;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -87,7 +88,7 @@ public class VisuPersonnagesDlg extends javax.swing.JDialog {
             int nbButton = jPanelTrombi.getComponentCount();
             for(int x=0;x<nbButton;x++){
                 JButton currentB = (JButton) jPanelTrombi.getComponent(x);
-                currentB.setIcon(new ImageIcon(characterList.getPerso(x).getPhoto()));
+                currentB.setIcon(new ImageIcon(characterList.getPerso(x).getPhoto().getScaledInstance(currentB.getWidth(), currentB.getHeight(), Image.SCALE_SMOOTH)));
             }    
         }
     }//GEN-LAST:event_ShowActionPerformed

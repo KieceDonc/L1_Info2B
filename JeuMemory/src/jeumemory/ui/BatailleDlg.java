@@ -102,6 +102,8 @@ public class BatailleDlg extends javax.swing.JDialog {
 
         jPanel5.setLayout(new java.awt.GridLayout(1, 2));
         jPanel5.add(JoueurLabel);
+
+        AdversaireLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jPanel5.add(AdversaireLabel);
 
         jPanel2.add(jPanel5, java.awt.BorderLayout.NORTH);
@@ -163,19 +165,19 @@ public class BatailleDlg extends javax.swing.JDialog {
     private void jListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListMouseClicked
         int selectedIndex = jList.getSelectedIndex();
         if(selectedIndex!=-1){
-            if(selectedIndex!=indexJoueur){
+            if(selectedIndex!=indexJoueur){ // le joueur courant c'est sélectionné lui-même
                 canStart=true;
                 adversaire = listJoueur.getJoueur(selectedIndex);
                 b = new Bataille(joueur,adversaire);
                 Annuler.setVisible(true);
                 JoueurLabel.setText(joueur.getPseudo());
                 AdversaireLabel.setText(adversaire.getPseudo());
-                InfosCarte1.setText(joueur.getEnPossession().toString()); // on affiche les informations relatives au paquet de carte du joueur
-                InfosCarte2.setText(adversaire.getEnPossession().toString()); // on affiche les informations relatives au paquet de carte de l'adversaire
+                updateCartes(joueur.getEnPossession().toString()+"\n\n",adversaire.getEnPossession().toString()+"\n\n"); // on affiche les informations relatives au paquet de carte du joueur et es informations relatives au paquet de carte de l'adversaire
                 MessageJ.setText(adversaire.getPseudo()+" sélectionné");
             }else{
                 canStart=false;
                 MessageJ.setText("Veuillez sélectionner un autre joueur que vous même !");
+                InfosCarte2.setText("");
             }
         }else{
             canStart=false;
@@ -188,17 +190,19 @@ public class BatailleDlg extends javax.swing.JDialog {
             if(canStart){
                 // on affiche les informations relatives à la première carte du paquet du joueur
                 // on affiche les informations relatives à la première carte du paquet de l'adversaire
-                updateCartes(joueur.getEnPossession().getPerso(0).toString(),adversaire.getEnPossession().getPerso(0).toString());
+                updateCartes(joueur.getPseudo()+" joue "+joueur.getEnPossession().getPerso(0).toString()+"\n",adversaire.getPseudo()+" joue "+adversaire.getEnPossession().getPerso(0).toString()+"\n");
                 int batailleResult = b.execute();
                 if(batailleResult==1||batailleResult==2){
                     if(batailleResult==1){ // le joueur a gagné
                         Vainqueur.setText(joueur.getPseudo());
+                        updateCartes(joueur.getPseudo()+" gagne\n",adversaire.getPseudo()+" perd\n");
                     }else{ // l'adversaire a gagné
+                        updateCartes(joueur.getPseudo()+" perd\n",adversaire.getPseudo()+" gagne\n");
                         Vainqueur.setText(adversaire.getPseudo());
                     }
                     // on affiche les informations relatives au paquet de carte du joueur
                     // on affiche les informations relatives au paquet de carte de l'adversaire
-                    updateCartes(joueur.getEnPossession().toString(),adversaire.getEnPossession().toString());
+                    updateCartes(joueur.getEnPossession().toString()+"\n",adversaire.getEnPossession().toString()+"\n");
                     Carte1.setIcon(new ImageIcon(joueur.getEnPossession().getPerso(0).getPhoto().getScaledInstance(Carte1.getWidth(), Carte1.getHeight(), Image.SCALE_SMOOTH))); // on affiche la photo de la nouvelle carte au dessus du paquet
                     Carte2.setIcon(new ImageIcon(adversaire.getEnPossession().getPerso(0).getPhoto().getScaledInstance(Carte2.getWidth(), Carte2.getHeight(), Image.SCALE_SMOOTH))); // on affiche la photo de la nouvelle carte au dessus du paquet
                 }else{ // soit il y a match nul soit l'un des deux joueurs n'a plus de carte
@@ -207,12 +211,14 @@ public class BatailleDlg extends javax.swing.JDialog {
                     }else{ // L'un des deux joueurs a un paquet vide ( impossible de continuer a jouer ) 
                         Demarrer.setEnabled(false);
                         Annuler.setText("Fermer");
-                        if(joueur.getEnPossession().getTaille()!=0){//Joueur vainqueur
+                        if(joueur.getEnPossession().getTaille()!=0){//Joueur courant vainqueur
+                            updateCartes(joueur.getPseudo()+" gagne\n",adversaire.getPseudo()+" perd\n");
                             Vainqueur.setText(joueur.getPseudo()+" a gagné !");
-                            updateCartes(joueur.getEnPossession().toString(),""); // on affiche les informations relatives au paquet du joueur et on supprime le texte de l'adversaire
+                            updateCartes(joueur.getEnPossession().toString()+"\n\n",""); // on affiche les informations relatives au paquet du joueur et on supprime le texte de l'adversaire
                         }else{ // Adversaire vainqueur
+                            updateCartes(joueur.getPseudo()+" perd\n",adversaire.getPseudo()+" gagne\n");
                             Vainqueur.setText(adversaire.getPseudo()+" a gagné !");
-                            updateCartes("",adversaire.getEnPossession().toString()); // on affiche les informations relatives au paquet de l'adversaire et on supprime de le texte du joueur
+                            updateCartes("",adversaire.getEnPossession().toString()+"\n\n"); // on affiche les informations relatives au paquet de l'adversaire et on supprime de le texte du joueur
                         }
                     }
                 }
@@ -225,8 +231,8 @@ public class BatailleDlg extends javax.swing.JDialog {
     }//GEN-LAST:event_DemarrerActionPerformed
 
     private void updateCartes(String s1,String s2){ // met à jour les jTextArea
-        InfosCarte1.setText(s1);
-        InfosCarte2.setText(s2);
+        InfosCarte1.append(s1);
+        InfosCarte2.append(s2);
     }
     private void Carte1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Carte1ActionPerformed
         // TODO add your handling code here:

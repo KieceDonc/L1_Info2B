@@ -41,6 +41,7 @@ public class TransfertDlg extends javax.swing.JDialog {
     
     private boolean setupFinished = false; // utilisé contre un bug
     private boolean allowToResizeDroit = true; // utilisé contre un bug
+    private boolean transfertAlreadyDone = false;
 
     /**
      * Creates new form TransferDlg
@@ -56,7 +57,7 @@ public class TransfertDlg extends javax.swing.JDialog {
         initCombo();// méthode pour remplir la liste déroulante
         indjs = 0;
         Message.setText("Le joueur "+lstPlayers.getJoueur(indj).getPseudo()+" a obtenu une famille complète");
-        Infos.setText("Personnages de "+lstPlayers.getJoueur(indj).getPseudo()+" : \n"+lstPlayers.getJoueur(indj).getPaquet());
+        Infos.setText("Personnages de "+lstPlayers.getJoueur(indj).getPseudo()+" : \n"+lstPlayers.getJoueur(indj).getPaquet()+"\n\n");
         //TODO Commenter  boutonActionPerformed (http://ufrsciencestech.u-bourgogne.fr/licence1/Info2B_InterfacesVisuelles/TP/tp6_I2B_2020.pdf)
         //TODO Dans le jeu, la boite ne s’ouvriraque si au moins un autre joueur à des cartes. /!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\
         initPanneauGauche();
@@ -148,11 +149,11 @@ public class TransfertDlg extends javax.swing.JDialog {
         this.indjs = ComboJoueurs.getSelectedIndex();
         if (indjs != -1){ // si un item dans la liste a été sélectionné alors
             if(this.indjs == this.indj) { // on vérifie que l'utilisateur n'a pas sélectionné le joueur courant. Si c'est le cas, on lui indique
-                Infos.setText("Sélectionnez un joueur différent du joueur courant !");
+                Infos.append("Sélectionnez un joueur différent du joueur courant !\n\n");
                 PanneauD.removeAll();
                 PanneauD.repaint();
             }else { // sinon on affiche les informations relatives au joueur sélectionné
-                Infos.setText("\nJoueur sélectionné: "+lstPlayers.getJoueur(indjs).toString());
+                Infos.append("Joueur sélectionné: "+lstPlayers.getJoueur(indjs).toString()+"\n\n");
                 initPanneauDroit();
                 dessinePanneau(PanneauD,lstPlayers.getJoueur(indjs).getPaquet());
             }
@@ -173,33 +174,36 @@ public class TransfertDlg extends javax.swing.JDialog {
         int result = transfert.execute();
         System.out.println(result);
         if(result>0){
+            transfertAlreadyDone=true;
             initPanneauGauche();
             initPanneauDroit();
             JButtonTransfert.setEnabled(false);
             System.out.println(jCourant.getEnPossession().toString());
             System.out.println(jCible.getEnPossession().toString());
-
+            Infos.append(transfert.getDeroulement()+"\n\n");
         }else{
-            Infos.setText("Il est nécessaire de sélectionner un joueur qui a au moins une carte");
+            Infos.append("Il est nécessaire de sélectionner un joueur qui a au moins une carte\n\n");
         }
     }//GEN-LAST:event_JButtonTransfertActionPerformed
 
     private void boutonActionPerformed(ActionEvent evt){
-        LesPersonnages lp = lstPlayers.getJoueur(indjs).getPaquet(); // on récupère les personnages du joueur sélectionné
-        int t = lp.getTaille(); // on récupère la taille des personnages 
-        JButton bt=(JButton) evt.getSource(); // on récupère le boutton sur lequel l'utilisateur a cliqué
-        fs = bt.getName();// la proprité Name, contient ici le nom du personnage affiché sur le bouton
-        for(int i = 0; i < t; i++) {
-            JButton b = (JButton)(PanneauD.getComponent(i));
-            if (b.getName().equals(fs)){
-                b.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, new java.awt.Color(255, 0, 0)));
-            }else{
-                b.setBorder(null);
+        if(!transfertAlreadyDone){
+            LesPersonnages lp = lstPlayers.getJoueur(indjs).getPaquet(); // on récupère les personnages du joueur sélectionné
+            int t = lp.getTaille(); // on récupère la taille des personnages 
+            JButton bt=(JButton) evt.getSource(); // on récupère le boutton sur lequel l'utilisateur a cliqué
+            fs = bt.getName();// la proprité Name, contient ici le nom du personnage affiché sur le bouton
+            for(int i = 0; i < t; i++) {
+                JButton b = (JButton)(PanneauD.getComponent(i));
+                if (b.getName().equals(fs)){
+                    b.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, new java.awt.Color(255, 0, 0)));
+                }else{
+                    b.setBorder(null);
+                }
             }
+            LesPersonnages lps = lp.getPersosFamille(fs);
+            Infos.append("Vous pouvez récupérer "+lps.getTaille()+" personnages : \n"+lps+"\n\n");
+            enableTransfertIfNeeded();   
         }
-        LesPersonnages lps = lp.getPersosFamille(fs);
-        Infos.setText("Vous pouvez récupérer "+lps.getTaille()+" personnages : \n"+lps);
-        enableTransfertIfNeeded();
     }
     
     private void initCombo(){
@@ -282,7 +286,7 @@ public class TransfertDlg extends javax.swing.JDialog {
     }
     
     private boolean shouldEnableTransfert(){
-        return fs!=null&&indjs!=-1&&indjs!=indj;
+        return fs!=null&&indjs!=-1&&indjs!=indj&&!transfertAlreadyDone;
     }
     /**
      * @param args the command line arguments

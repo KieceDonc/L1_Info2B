@@ -60,7 +60,7 @@ public class Personnage {
     
     @Override
     public String toString(){
-        return "\nfamille: "+famille+"\nnom: "+nom+"\nvaleur: "+valeur+"\nchemin d'accès: memory/img/"+nom+".png";
+        return "famille: "+famille+", nom: "+nom+", valeur: "+valeur+", chemin d'accès: memory/img/"+nom+".png";
     }
     
     

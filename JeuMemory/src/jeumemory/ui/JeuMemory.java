@@ -76,7 +76,7 @@ public class JeuMemory extends javax.swing.JFrame {
             });
             jPanelPlateau.add(current);
         }
-        jeu = new Jeu(lstPerso,lstPlayers,difficultyLvl*2);
+        jeu = new Jeu(lstPerso,lstPlayers,difficultyLvl*2,difficultyLvl);
         showWhoMustPlay(jeu.getJoueurCourant().getPseudo());
         showNbPersoRestant(difficultyLvl);
         showNbPersoFounded(0);
@@ -89,6 +89,7 @@ public class JeuMemory extends javax.swing.JFrame {
     private void wipeData(){
         lstPlayers.wipeDataForEveryPlayer();
         jPanelPlateau.removeAll();
+        jTextAreaInfo.setText("");
     }
 
     /**
