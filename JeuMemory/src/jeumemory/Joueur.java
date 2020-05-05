@@ -18,7 +18,6 @@ public class Joueur {
     private Famille famillepref;
     private LesPersonnages enPossession;
     private ImageIcon imgJoueur;
-    private int score;
     
     public Joueur(String pseudo){
         
@@ -39,7 +38,6 @@ public class Joueur {
         }else{
             setImgJoueur(new ImageIcon(getClass().getResource("/jeumemory/img/joueurDefaut.jpg")));
         }
-        setScore(0);
         setEnPossession(new LesPersonnages());
         if(famille!=null){
             setFamillepref(famille);
@@ -73,11 +71,7 @@ public class Joueur {
     }
 
     public int getScore() {
-        return score;
-    }
-
-    private void setScore(int score) {
-        this.score = score;
+        return getEnPossession().getScore();
     }
 
     public ImageIcon getImgJoueur() {
@@ -119,7 +113,6 @@ public class Joueur {
      */
     public void wipeData(){
         enPossession = new LesPersonnages();
-        score = 0;
     }
     
     public boolean equals(Joueur j){
@@ -135,7 +128,7 @@ public class Joueur {
     }
 
     public String toString() {
-        String toReturn = "Joueur " + pseudo + "\nFamille préféré:";
+        String toReturn = "Joueur " + pseudo + "\nFamille préférée:";
         
         if(famillepref==null){
             toReturn+=" aucune";
@@ -148,10 +141,10 @@ public class Joueur {
         if(enPossession==null||enPossession.getTaille()==0){
             toReturn+="aucun personnage\n";
         }else{
-            toReturn+=" "+enPossession.toString();
+            toReturn+=enPossession.toString();
         }
         
-        toReturn+="Score :" + score;
+        toReturn+="Score :" + getScore();
         
         return toReturn;
    }

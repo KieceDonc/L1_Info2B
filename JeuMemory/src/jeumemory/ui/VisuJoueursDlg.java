@@ -75,7 +75,7 @@ public class VisuJoueursDlg extends javax.swing.JDialog {
     private void initPanneau(){  
         JScrollPane jScrollPane = new JScrollPane();
         JTextArea showInfo = new JTextArea();
-        jScrollPane.add(showInfo);
+        jScrollPane.setViewportView(showInfo);
         
         if(playersToShow!=null){ // on vérifie que des joueurs existent
                 
@@ -96,7 +96,7 @@ public class VisuJoueursDlg extends javax.swing.JDialog {
                     Panneau.add(jb);
                 }
             }
-            Panneau.add(showInfo);  // on ajoute le boutton crée
+            Panneau.add(jScrollPane);  // on ajoute le boutton crée
             showInfo.setText("Texte qui sert à avoir une bonne dimension"
                     + "\nTexte qui sert à avoir une bonne dimension"
                     + "\nTexte qui sert à avoir une bonne dimension"

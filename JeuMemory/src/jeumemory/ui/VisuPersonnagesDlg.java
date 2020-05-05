@@ -116,6 +116,7 @@ public class VisuPersonnagesDlg extends javax.swing.JDialog {
                 jb.setPreferredSize(new Dimension(anonymIcon.getIconWidth(),anonymIcon.getIconHeight())); // on définit la taille du boutton a partir de la taille de l'image d'anonyme
                 jPanelTrombi.add(jb);
             }
+            Score.setText("Score : "+currentPlayer.getScore());
         }
         pack();
     }

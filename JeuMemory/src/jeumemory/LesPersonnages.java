@@ -84,9 +84,9 @@ public class LesPersonnages {
         }
     }
          
-     public int getTaille() { 
+    public int getTaille() { 
          return this.persos.size(); 
-     }
+    }
      
     public int getScore(){   
         int sc = 0;

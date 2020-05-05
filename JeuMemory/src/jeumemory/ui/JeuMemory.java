@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JPanel;
 import javax.swing.Timer;
 import jeumemory.Erreur;
 import jeumemory.Famille;
@@ -90,6 +89,7 @@ public class JeuMemory extends javax.swing.JFrame {
         lstPlayers.wipeDataForEveryPlayer();
         jPanelPlateau.removeAll();
         jTextAreaInfo.setText("");
+        forbiddenToPlay=false;
     }
 
     /**
@@ -250,7 +250,7 @@ public class JeuMemory extends javax.swing.JFrame {
                 showErrorDlg(Erreur.OnePlayerAlreadyInTheList);
             }
             difficultyLvl = difficulty; // on change le niveau de difficulté par rapport à ce que l'utilisateur a choisit
-            if(difficultyLvl!=0){
+            if(difficultyLvl!=0){ 
                 lstPerso = new LesPersonnages(difficulty);    
             }
         }
@@ -363,6 +363,13 @@ public class JeuMemory extends javax.swing.JFrame {
     }
     
         
+    private void updateJLabel(){
+        showWhoMustPlay(jeu.getJoueurCourant().getPseudo());
+        showNbPersoRestant(plateau.getNbp());
+        showNbPersoFounded(difficultyLvl-plateau.getNbp());  
+    }
+    
+        
     public void startTimer(){// définit un timer qui lance la vérification des deux personnages au bout d'une demi-seconde
         Timer t = new Timer(500, new ActionListener(){
             @Override
@@ -375,12 +382,13 @@ public class JeuMemory extends javax.swing.JFrame {
     }
     
     public void verifPersos(){
+        boolean someWon = false;
         if(plateau.getCase(l1,c1)==plateau.getCase(l2, c2)){ // les personnages des deux cartes sont identiques
             int result = jeu.traiterTour(jeu.getJoueurCourant(), plateau.getCase(l1, c1));
             switch(result){
                 case 0:{
-                    jTextAreaInfo.append(jeu.getJoueurCourant().getPseudo()+" a gagné !\n\n");        
-                    forbiddenToPlay = true;
+                    jTextAreaInfo.append(jeu.getJoueurCourant().getPseudo()+" a gagné !\n\n");       
+                    someWon=true;
                     break;
                 }
                 case 1:{
@@ -402,11 +410,13 @@ public class JeuMemory extends javax.swing.JFrame {
                 }
             }
             plateau.invalide(l1, c1, l2, c2);
-            if(plateau.jeuVide()){
-                showWinner_s();
-                forbiddenToPlay = true;
-            }else{
-                changeJoueurCourant();
+            if(!someWon){
+                if(plateau.jeuVide()){
+                    showWinner_s();
+                    forbiddenToPlay = true;
+                }else{
+                    changeJoueurCourant();
+                }   
             }
         }else{
             changeJoueurCourant();
@@ -422,13 +432,13 @@ public class JeuMemory extends javax.swing.JFrame {
      * Permet "d'effacé" les cartes retournées par le joueur
      */
     public void cleanReturnedCards(){
-            int positionButton1 = l1*plateau.getNbCol()+c1; // on récupère la position du bouton 1
-            int positionButton2 = l2*plateau.getNbCol()+c2; // on récupère la position du bouton 2
-            System.out.println(positionButton1+" "+positionButton2);
-            JButton button1 = (JButton)jPanelPlateau.getComponent(positionButton1); // on récupère le bouton 1
-            JButton button2 = (JButton)jPanelPlateau.getComponent(positionButton2); // on récupère le bouton 2
-            button1.setIcon(null); // on "efface" la photo retourner par le joueur
-            button2.setIcon(null); // on "efface" la photo retourner par le joueur
+        int positionButton1 = l1*plateau.getNbCol()+c1; // on récupère la position du bouton 1
+        int positionButton2 = l2*plateau.getNbCol()+c2; // on récupère la position du bouton 2
+        JButton button1 = (JButton)jPanelPlateau.getComponent(positionButton1); // on récupère le bouton 1
+        JButton button2 = (JButton)jPanelPlateau.getComponent(positionButton2); // on récupère le bouton 2
+        button1.setIcon(null); // on "efface" la photo retourner par le joueur
+        button2.setIcon(null); // on "efface" la photo retourner par le joueur
+        forbiddenToPlay=false;
     }
     
     /**
@@ -441,9 +451,7 @@ public class JeuMemory extends javax.swing.JFrame {
             prochainJoueurCourant = 0;
         }
         jeu.setIndiceJoueurCourant(prochainJoueurCourant);//Le joueur courant change et est fixé au joueur suivant.      
-        showWhoMustPlay(jeu.getJoueurCourant().getPseudo());
-        showNbPersoRestant(plateau.getNbp());
-        showNbPersoFounded(difficultyLvl-plateau.getNbp());  
+        updateJLabel();
         forbiddenToPlay=false;
     }
     
@@ -455,26 +463,27 @@ public class JeuMemory extends javax.swing.JFrame {
         String toShow ="";
         try{
             LesJoueurs Gagnant = lstPlayers.getGagnant();
-            if(Gagnant.getNbJoueurs()==0){
-               toShow= Gagnant.getJoueur(0).getPseudo();
+            if(Gagnant.getNbJoueurs()==1){
+               toShow = Gagnant.getJoueur(0).getPseudo();
             }else{
                 moreThanOneWinner=true;
                 for(int x=0;x<Gagnant.getNbJoueurs();x++){ // on récupère le pseudo de tout les gagnants
-                    toShow+=Gagnant.getJoueur(x).getPseudo()+" ";
+                    toShow+=Gagnant.getJoueur(x).getPseudo()+", ";
                 }
             }
             if(moreThanOneWinner){
-                jTextAreaInfo.append(toShow+" ont gagné !\n\n");            
+                jTextAreaInfo.append(toShow+"ont gagné !\n\n");            
             }else{
                 jTextAreaInfo.append(toShow+" a gagné !\n\n");            
             }
+            updateJLabel();
         }catch(Exception ex){
             System.out.println("This shoudln't be called ( at showWinner_s() )");
         }
     }
     
     /**
-     * @return Liste de joueurs 
+     * @return Liste de joueurs test 
      */
     public LesJoueurs getExampleLesJoueurs(){
         LesJoueurs toReturn=null;
