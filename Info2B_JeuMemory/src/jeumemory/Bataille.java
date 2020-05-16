@@ -20,19 +20,18 @@ public class Bataille extends Action {
     public Bataille(Joueur j,Joueur ad){
         super(j,"Bataille");
         this.ad=ad;
-        
     }
 
     @Override
     public int execute() {
-        LesPersonnages paquetJ = getJoueur().getEnPossession(); // paquet du joueur qui a déclenché l'action
+        LesPersonnages paquetJ = getJoueurCourant().getEnPossession(); // paquet du joueur qui a déclenché l'action
         LesPersonnages paquetAd = ad.getEnPossession(); // paquet du joueur adversaire
         int result =-1;
         if(paquetJ.getTaille()>0&&paquetAd.getTaille()>0){
             Personnage carteJ = paquetJ.getPerso(0); // on récupère la première carte du paquet du joueur
             Personnage carteAd = paquetAd.getPerso(0); // on récupère la première carte du paquet du joueur
             paquetJ.retirePerso(0); // on retire la première carte du joueur
-            paquetJ.retirePerso(0); // on retire la première carte de l'adversaire
+            paquetAd.retirePerso(0); // on retire la première carte de l'adversaire
             int valueJ = carteJ.getValeur(); // on récupère la valeur de la carte du joueur
             int valueAd = carteAd.getValeur();// on récupère la valeur de la carte de l'adversaire
             if(valueJ==valueAd){ 
@@ -43,21 +42,20 @@ public class Bataille extends Action {
                 if(valueJ>valueAd){
                     result=1;
                     paquetJ.ajoutePerso(carteJ);
-                    paquetAd.ajoutePerso(carteAd);
+                    paquetJ.ajoutePerso(carteAd);
                 }else{
                     result=2;
                     paquetAd.ajoutePerso(carteAd);
                     paquetAd.ajoutePerso(carteJ);
                 }
             }
-            
             if(paquetJ.getTaille()==0){
                 result=-1;
-                setDeroulement(ad.getPseudo()+" a gagné contre "+getJoueur().getPseudo());
+                setDeroulement(ad.getPseudo()+" a gagné contre "+getJoueurCourant().getPseudo());
             }
             if(paquetAd.getTaille()==0){
                 result=-1;
-                setDeroulement(getJoueur().getPseudo()+" a gagné contre "+ad.getPseudo());
+                setDeroulement(getJoueurCourant().getPseudo()+" a gagné contre "+ad.getPseudo());
             }
         }
         return result;

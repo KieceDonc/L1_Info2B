@@ -19,9 +19,9 @@ public class Jeu {
     private int difficulty;
     
     
-    public Jeu(LesPersonnages lp, LesJoueurs lj, int nbc,int difficulty){ // nbc  nombre case
+    public Jeu(LesPersonnages lp, LesJoueurs lj,int difficulty){ // nbc  nombre case
         this.lstPerso=lp;
-        this.plateau=new PlateauJeu(nbc);
+        this.plateau=new PlateauJeu(difficulty);
         this.lstPlayers=lj;
         this.act=null;
         this.indC=0;

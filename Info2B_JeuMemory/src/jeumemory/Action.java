@@ -23,7 +23,7 @@ public abstract class Action {
         this.deroulement="";
     }
 
-    public Joueur getJoueur() {
+    public Joueur getJoueurCourant() {
         return j;
     }
 

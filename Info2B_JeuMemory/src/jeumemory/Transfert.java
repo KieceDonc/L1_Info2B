@@ -11,22 +11,20 @@ package jeumemory;
  */
 public class Transfert extends Action{
     
-    private Joueur jCourant;
     private Joueur jCible;
     private LesPersonnages cartesTransferees;
-    private String fp;
+    private String fp; // famille perso
     
     private final static String descAction = "Transfert de  cartes";
 
     public Transfert(Joueur jCourant, Joueur jCible, String fp) {
         super(jCourant, descAction);
-        this.jCourant = jCourant;
         this.jCible = jCible;
         this.fp = fp;    
     }
 
     public Joueur getjCourant() {
-        return jCourant;
+        return super.getJoueurCourant();
     }   
 
     public Joueur getJoueurCible() {
@@ -42,9 +40,8 @@ public class Transfert extends Action{
         if(fp!=null){
             cartesTransferees = jCible.getEnPossession().getPersosFamille(fp);// on récupère la liste de tout les personnages qui vont êtes transférées
             jCible.getEnPossession().retirePersosFamille(fp);
-            jCourant.getEnPossession().ajoutePersos(cartesTransferees);
-            String deroulement = jCourant.getPseudo()+" a prit la famille "+fp+" à "+jCible.getPseudo();
-            super.setDeroulement(deroulement);
+            getjCourant().getEnPossession().ajoutePersos(cartesTransferees);
+            super.setDeroulement(getjCourant().getPseudo()+" a prit la famille "+fp+" à "+jCible.getPseudo());
             return cartesTransferees.getTaille();
         }else{
             return 0;

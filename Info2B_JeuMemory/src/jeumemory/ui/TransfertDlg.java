@@ -170,7 +170,7 @@ public class TransfertDlg extends javax.swing.JDialog {
         Joueur jCourant = lstPlayers.getJoueur(indj);
         Joueur jCible = lstPlayers.getJoueur(indjs);
 
-        transfert = new Transfert(jCourant, jCible,fs);
+        transfert = new Transfert(jCourant, jCible, fs);
         int result = transfert.execute();
         System.out.println(result);
         if(result>0){

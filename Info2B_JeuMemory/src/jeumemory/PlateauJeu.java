@@ -21,7 +21,7 @@ public class PlateauJeu {
         this.nblig=(int)(Math.sqrt(nbp*2));
         this.nbcol=nbp*2/nblig;
         this.tab=new int [this.nblig][this.nbcol];
-        initPlateauJeu();
+        this.initPlateauJeu();
     }
     
     public PlateauJeu(){

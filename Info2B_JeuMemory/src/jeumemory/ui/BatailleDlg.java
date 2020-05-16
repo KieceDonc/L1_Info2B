@@ -29,6 +29,10 @@ public class BatailleDlg extends javax.swing.JDialog {
        avec ce booléen canStart on évite tout malentendu .... )
     */
     private boolean canStart=false; //
+    
+    public interface setOnBatailleEnded{
+        void onBatailleEnded(Bataille bataille);
+    }
 
     /**
      * Creates new form BatailleDlg
