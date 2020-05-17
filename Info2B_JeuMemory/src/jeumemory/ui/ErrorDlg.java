@@ -5,11 +5,6 @@
  */
 package jeumemory.ui;
 
-import java.awt.Image;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import javax.swing.ImageIcon;
-
 /**
  *
  * @author Valentin

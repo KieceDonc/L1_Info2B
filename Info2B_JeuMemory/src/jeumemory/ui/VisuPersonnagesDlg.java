@@ -8,12 +8,10 @@ package jeumemory.ui;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import jeumemory.Joueur;
 import jeumemory.LesPersonnages;
-import jeumemory.Personnage;
 
 /**
  *

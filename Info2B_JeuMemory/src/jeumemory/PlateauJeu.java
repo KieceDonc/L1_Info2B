@@ -84,8 +84,10 @@ public class PlateauJeu {
         melange();
     }
     
+    
     public void invalide(int l1, int c1, int l2, int c2){
-        tab[l1][c1]=-1;tab[l2][c2]=-1;
+        tab[l1][c1]=-1;
+        tab[l2][c2]=-1;
         nbp--;
     }
     
